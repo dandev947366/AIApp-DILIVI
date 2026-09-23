@@ -7,7 +7,7 @@ Starter template for the **Development of AI Applications** course final group p
 - Member 1 Name (email@example.com)
 - Member 2 Name (email@example.com)
 - Member 3 Name (email@example.com)
-
+- Member 4: Dan Le (dan23001@student.hamk.fi)
 ## Problem
 
 ### Intended users
