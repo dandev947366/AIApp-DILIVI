@@ -87,7 +87,7 @@ The project is expected to use:
 - Ollama
 - Local LLM
 - Pydantic
-- A suitable user interface
+- Telegram bot for notifications and as a interface
 - Moodle iCal integration (planned)
 
 ## Evaluation
@@ -114,7 +114,6 @@ Evaluation can check:
 
 Possible future extensions:
 
-- Telegram notifications
 - Student feedback after completing an assignment
 - Persistent storage of actual completion times
 - Personalized workload estimates
