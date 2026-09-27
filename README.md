@@ -1,140 +1,121 @@
-# Project name
+# AI Study Deadline Assistant
 
-Starter template for the **Development of AI Applications** course final group project.
+Starter project for the **Development of AI Applications** course final group project.
 
 ## Team members
 
-- Member 1 Name (email@example.com)
+- Member 1 Dmytro Krempovskyy (amk1002944@student.hamk.fi)
 - Member 2: Vindya Nukulasooriya (amk1001863@student.hamk.fi)
-- Member 3 Name (email@example.com)
+- Member 3 Lien Pham (amk1002343@student.hamk.fi)
 - Member 4: Dan Le (dan23001@student.hamk.fi)
+
 ## Problem
 
 ### Intended users
-Who are the primary target users of this application?
+
+University students who manage coursework, assignments, and deadlines through Moodle.
 
 ### Problem statement
-What specific problem does this application solve for those users?
+
+Students can see when assignments are due, but it can be difficult to decide when they should start working on them.
+
+Different assignments require different amounts of time and effort. Starting too late can lead to rushed work and missed deadlines.
 
 ### Why AI is appropriate
-Why does this problem require AI / LLM capabilities rather than traditional deterministic software?
+
+Assignment descriptions contain unstructured natural language and can vary significantly between courses.
+
+An LLM can interpret the assignment description, identify the type and complexity of the task, and produce an estimated workload.
+
+Traditional fixed rules would have difficulty handling the different ways assignments are described.
 
 ## Solution
 
-Briefly describe your application, its primary value proposition, and how it addresses the problem statement above.
+The AI Study Deadline Assistant helps students plan when to start their assignments.
+
+The application reads assignment information, uses an AI model to estimate the workload, and calculates a recommended starting time before the deadline.
+
+Example:
+
+Assignment description  
+- AI workload estimate  
+- Recommended start date  
+- Student reminder
 
 ## Main user workflow
 
-1. **User Input:** The user submits a prompt or query via the Gradio user interface.
-2. **Processing & Guardrails:** The application service layer (`src/services/ai_service.py`) validates and formats the request.
-3. **Model Response:** The model client calls Ollama locally and returns the response back through the service layer to the UI.
+1. **Get assignment:** The application receives assignment information and its deadline.
+2. **Process assignment:** The service layer validates and prepares the assignment description.
+3. **AI analysis:** The local LLM analyses the assignment and returns a structured workload estimate.
+4. **Planning:** The application calculates a recommended start time using the estimate, deadline, and a safety buffer.
+5. **User output:** The student sees the assignment, estimated workload, and recommended start time.
 
 ## Architecture
 
-Below is the initial starter architecture. As your project evolves with additional capabilities, replace or extend this diagram in [`docs/architecture.md`](docs/architecture.md).
+Initial architecture:
 
-```text
-User
-  ↓
-Gradio UI (app/ui.py)
-  ↓
-Application / AI Service (src/services/ai_service.py)
-  ↓
-Model Client (src/models/model_client.py)
-  ↓
-Ollama (Local LLM Server)
-```
+![AI Study Deadline Assistant Architecture](docs/DAIA_architecture.svg)
 
-> **Core Architectural Rule:** The user interface must NEVER communicate directly with the model client or Ollama. All interactions must pass through the service layer (`ai_service.py`).
+> **Core Architectural Rule:** The user interface does not communicate directly with the model or Ollama. Model interaction passes through the application/service layer.
 
 ## Model
 
-- **Model used:** e.g., `llama3.2` (or specified local Ollama model)
-- **Selection rationale:** Why was this specific model chosen for your project (e.g., lightweight, performance, context size)?
+- **Model used:** Qwen3 4B (`qwen3:4b`)
+- **Selection rationale:** Qwen3 4B is a relatively lightweight model that can run locally through Ollama. It supports instruction following and structured AI tasks, making it suitable for analysing assignment descriptions and producing workload estimates. The model will be evaluated during development and may be changed if another local model performs better.
 
 ## Additional AI capability
 
-Select at least one additional capability to implement for your final project:
+Possible capability:
 
-- [ ] RAG (Retrieval-Augmented Generation)
-- [ ] Tools / External API integration
-- [ ] Model Context Protocol (MCP)
-- [ ] Agentic workflow (Model-selected actions based on observations)
-- [ ] Memory / Persistent state
-- [ ] Multimodal interaction (Text + Images)
-- [ ] Other: ______________________
+- [ ] Tools / External integration (planned: Moodle iCal)
+- [ ] Memory / Persistent state (possible later extension)
+- [ ] Other capabilities if justified later
 
 ### Capability justification
-Explain why the selected capability is useful and necessary for your application's user problem.
+
+The application may integrate with a student's Moodle calendar/iCal feed to obtain assignment information automatically.
+
+This allows the AI component to analyse real assignment descriptions instead of requiring the student to manually copy every assignment into the application.
 
 ## Setup
 
-### 1. Create the Conda environment
+Setup instructions will be updated as the application is developed.
 
-```bash
-conda env create -f environment.yml
-```
+The project is expected to use:
 
-### 2. Activate the environment
-
-```bash
-conda activate dev-ai-project
-```
-
-### 3. Configure environment variables
-
-Copy `.env.example` to create your local `.env` configuration file:
-
-On Linux / macOS:
-```bash
-cp .env.example .env
-```
-
-On Windows (Command Prompt / PowerShell):
-```powershell
-copy .env.example .env
-```
-
-Ensure `.env` contains valid values for `OLLAMA_BASE_URL` and `MODEL_NAME`:
-```env
-OLLAMA_BASE_URL=http://localhost:11434
-MODEL_NAME=llama3.2
-```
-
-### 4. Start Ollama
-
-Make sure Ollama is installed and running locally, then pull your configured model:
-
-```bash
-ollama run llama3.2
-```
-
-### 5. Run the application
-
-Run the application from the root directory of the project:
-
-```bash
-python -m app.main
-```
-
-Then open your browser at `http://localhost:7860`.
-
-### 6. Run automated tests
-
-```bash
-pytest
-```
+- Python
+- Ollama
+- Local LLM
+- Pydantic
+- Telegram bot for notifications and as a interface
+- Moodle iCal integration (planned)
 
 ## Evaluation
 
-Describe your evaluation methodology and summarize key results. Starter test cases can be found in [`evaluation/test_cases.json`](evaluation/test_cases.json).
+We will test the application using representative assignment descriptions with different workload levels.
 
-Refer to [`evaluation/README.md`](evaluation/README.md) for guidelines on defining success, edge cases, and failure scenarios.
+Evaluation can check:
+
+- whether the assignment is interpreted correctly;
+- whether the workload estimate is reasonable;
+- whether structured output is valid;
+- whether the recommended start time is calculated correctly;
+- whether the application handles incomplete or unclear assignment information safely.
 
 ## Known limitations
 
-- Highlight known system limitations, unhandled edge cases, or boundaries of current capabilities.
+- AI workload estimates may be inaccurate.
+- Assignment descriptions may not contain enough information for a reliable estimate.
+- Actual working time differs between students.
+- Moodle/iCal data availability may vary.
+- Recommended start times should be treated as planning assistance rather than guaranteed estimates.
 
 ## Future improvements
 
-- List planned feature enhancements, architectural refactorings, or future capabilities.
+Possible future extensions:
+
+- Student feedback after completing an assignment
+- Persistent storage of actual completion times
+- Personalized workload estimates
+- Natural-language commands such as "What's due this week?"
+- Snoozing or rescheduling reminders
