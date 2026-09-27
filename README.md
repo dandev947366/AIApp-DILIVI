@@ -60,8 +60,8 @@ Initial architecture:
 
 ## Model
 
-- **Model used:** To be decided/tested
-- **Selection rationale:** A local Ollama chat model capable of understanding assignment descriptions and producing reliable structured output.
+- **Model used:** Qwen3 4B (`qwen3:4b`)
+- **Selection rationale:** Qwen3 4B is a relatively lightweight model that can run locally through Ollama. It supports instruction following and structured AI tasks, making it suitable for analysing assignment descriptions and producing workload estimates. The model will be evaluated during development and may be changed if another local model performs better.
 
 ## Additional AI capability
 
