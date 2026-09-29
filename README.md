@@ -26,11 +26,11 @@ Different assignments require different amounts of time and effort. Starting too
 The problem is not only remembering tasks, but also understanding what to do next and how current study activities connect to longer-term academic and career goals. Our project aims to develop an AI-powered student assistant that can support students across different stages of their study path:
 * Managing and understanding homework, individual assignments and group projects.
 * Organizing academic priorities and deadlines.
-* Generating thesis topic suggestions beased on the student's major, interest, and skills.
+* Generating thesis topic suggestions based on the student's major, interest, and skills.
 * Connecting study experience with possible career directions.
 * Supporting internship and job-market exploration
 
-The project therefore moves from a simple task-management assisitant toward a more comprehensive study-to-career support system.
+The project therefore moves from a simple task-management assistant toward a more comprehensive study-to-career support system.
 
 
 ### Why AI is appropriate
@@ -41,7 +41,7 @@ An LLM can interpret the assignment description, identify the type and complexit
 
 Traditional fixed rules would have difficulty handling the different ways assignments are described.
 
-Further more, students have not yet defined a graduation thesis topic that aligns with their skills, interests and field of study. For exapmle, a student may ask: "I study Computer Applications and I am interested in Python, SQL and AI. What thesis topics could fit my interest?"
+Furthermore, students have not yet defined a graduation thesis topic that aligns with their skills, interests and field of study. For example, a student may ask: "I study Computer Applications and I am interested in Python, SQL and AI. What thesis topics could fit my interest?"
 
 These tasks require understanding context, identifying relationships between information, and generating personalized suggestions.
 
@@ -65,8 +65,8 @@ Assignment description
 - Student reminder
 
 The solution can be viewed as three connected levels:
-1. Study managment including: understanding assignments, organize homework and deadlines, identify priorities and make reminder
-2. Thesis and study planning: base on study major, skills, interests and previous academic activities to suggest possible thesis areas, thesis topic ideas, research direction, technologies or skills that may be relevant.
+1. Study management including: understanding assignments, organize homework and deadlines, identify priorities and make reminder.
+2. Thesis and study planning: based on study major, skills, interests and previous academic activities to suggest possible thesis areas, thesis topic ideas, research direction, technologies or skills that may be relevant.
 3. Career exploration: as a future extension, the assistant can connect the student's profile with current job-market information to support internship research, career development planning.
 
 ## Main user workflow
@@ -77,7 +77,7 @@ The solution can be viewed as three connected levels:
 4. **Planning:** The application calculates a recommended start time using the estimate, deadline, and a safety buffer.
 5. **User output:** The student sees the assignment, estimated workload, and recommended start time.
 6. **Study-profile connection:** The system compares the skills and topics identified from assignment with student's study profile, interests, previous projects.
-7. **Thesis topic generation:** Based on the accumulated study infomration, the AI suggest possible thesis areas or topics that are related to the student's major, skills and completed assignments.
+7. **Thesis topic generation:** Based on the accumulated study infomration, the AI suggests possible thesis areas or topics that are related to the student's major, skills and completed assignments.
 8. **Career and thesis output:** student receives a connected set of recommendations showing how current assignments can contribute to longer-term goals, for example: Assignment → Skills → Thesis idea → Career skills → Seeking for internship/Workplacement.
 9. **User reaction:** student can accept, reject, or refine the suggestions, allowing the AI to generate more relevant thesis and internship recommendations.
 
@@ -122,7 +122,7 @@ The project is expected to use:
 - Pydantic
 - Telegram bot for notifications and as a interface
 - Moodle iCal integration (planned)
-- Required Python dependencies listed in requirements.text
+- Required Python dependencies listed in requirements.txt
 
 ## Evaluation
 
@@ -135,7 +135,7 @@ Evaluation can check:
 - whether structured output is valid;
 - whether the recommended start time is calculated correctly;
 - whether the application handles incomplete or unclear assignment information safely.
-- whether the generated thesis topics are relevant to the student's major, skill,, interests, and previous study activities.
+- whether the generated thesis topics are relevant to the student's major, skills, interests, and previous study activities.
 - whether the system can create a logical connection between current assignments, skills, thesis development, and career preparation.
 - whether the application handles incomplete, ambiguous, or insufficient student information safely and avoids presenting uncertain suggestions as facts.
 - whether repeated interactions with additional student information improve the relevance of the generated recommendations.
@@ -149,7 +149,7 @@ Evaluation can check:
 - Recommended start times should be treated as planning assistance rather than guaranteed estimates.
 - Thesis topic suggesetions are currently based mainly on the information provided by the student and the LLM's existing knowledge. They do not necessarily represent the current job market.
 - The current system does not automatically verify whether suggested thesis topics or career opportunities are available or relevant at a specific university, company, or location.
-- AI-generated recommendations should be treated as decsion-support and planning assistance rather than guaranteed workload estimates, thesis recommendations, or career outcomes.
+- AI-generated recommendations should be treated as decision-support and planning assistance rather than guaranteed workload estimates, thesis recommendations, or career outcomes.
 
 ## Future improvements
 
@@ -160,8 +160,8 @@ Possible future extensions:
 - Personalized workload estimates
 - Natural-language commands such as "What's due this week?"
 - Snoozing or rescheduling reminders
-- Build a persistent student profile containing couurses, skills, interests, projects, thesis preferences, and career goals.
+- Build a persistent student profile containing courses, skills, interests, projects, thesis preferences, and career goals.
 - Improve personalization by comparing assignments and acquired skills over time.
-- Add RAG to retrieve information from trusted academic, university,a and career sources.
-- Integrate current job-market data or job-search APIs to support internship and job exlporation.
+- Add RAG to retrieve information from trusted academic, university, and career sources.
+- Integrate current job-market data or job-search APIs to support internship and job exploration.
 - Add stronger privacy and security mechanisms for storing and processing student information.
