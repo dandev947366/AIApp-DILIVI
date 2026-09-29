@@ -6,7 +6,7 @@ Starter project for the **Development of AI Applications** course final group pr
 
 - Member 1 Dmytro Krempovskyy (amk1002944@student.hamk.fi)
 - Member 2: Vindya Nukulasooriya (amk1001863@student.hamk.fi)
-- Member 3 Lien Pham (amk1002343@student.hamk.fi)
+- Member 3: Lien Pham (amk1002343@student.hamk.fi)
 - Member 4: Dan Le (dan23001@student.hamk.fi)
 
 ## Problem
@@ -47,9 +47,9 @@ These tasks require understanding context, identifying relationships between inf
 
 In this scenario, LLM is useful for generating personalized suggestions connecting student's interest, strength and study goals.
 
-In terms of further career goals, it can generate some research about job market, internship opportunities that help student have insight about market demand.
+In terms of further career goals, it can generate some research about job market, internship opportunities that helps student have insight about market demand.
 
-Ai therefore adds a reasoning and personalization layer on top of traditional student-management functionality.
+AI therefore adds a reasoning and personalization layer on top of traditional student-management functionality.
 
 ## Solution
 
