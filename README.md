@@ -47,7 +47,7 @@ These tasks require understanding context, identifying relationships between inf
 
 In this scenario, LLM is useful for generating personalized suggestions connecting student's interest, strength and study goals.
 
-In terms of further career goals, it can generate some research about job market, internship opportunities that help student have insight about market demand.
+In terms of further career goals, it can generate some research about job market, internship opportunities that helps student have insight about market demand.
 
 AI therefore adds a reasoning and personalization layer on top of traditional student-management functionality.
 
