@@ -77,7 +77,7 @@ The solution can be viewed as three connected levels:
 4. **Planning:** The application calculates a recommended start time using the estimate, deadline, and a safety buffer.
 5. **User output:** The student sees the assignment, estimated workload, and recommended start time.
 6. **Study-profile connection:** The system compares the skills and topics identified from assignment with student's study profile, interests, previous projects.
-7. **Thesis topic generation:** Based on the accumulated study infomration, the AI suggests possible thesis areas or topics that are related to the student's major, skills and completed assignments.
+7. **Thesis topic generation:** Based on the accumulated study information, the AI suggests possible thesis areas or topics that are related to the student's major, skills and completed assignments.
 8. **Career and thesis output:** student receives a connected set of recommendations showing how current assignments can contribute to longer-term goals, for example: Assignment → Skills → Thesis idea → Career skills → Seeking for internship/Workplacement.
 9. **User reaction:** student can accept, reject, or refine the suggestions, allowing the AI to generate more relevant thesis and internship recommendations.
 
@@ -108,7 +108,7 @@ The application may integrate with a student's Moodle calendar/iCal feed to obta
 
 This allows the AI component to analyse real assignment descriptions instead of requiring the student to manually copy every assignment into the application.
 
-The important value of AI is therefore not simply generating text, but connecting different tyoes of student information and turning them into personalized suggestions.
+The important value of AI is therefore not simply generating text, but connecting different types of student information and turning them into personalized suggestions.
 
 ## Setup
 
@@ -120,7 +120,7 @@ The project is expected to use:
 - Ollama
 - Local LLM
 - Pydantic
-- Telegram bot for notifications and as a interface
+- Telegram bot for notifications and as an interface
 - Moodle iCal integration (planned)
 - Required Python dependencies listed in requirements.txt
 
@@ -147,7 +147,7 @@ Evaluation can check:
 - Actual working time differs between students.
 - Moodle/iCal data availability may vary.
 - Recommended start times should be treated as planning assistance rather than guaranteed estimates.
-- Thesis topic suggesetions are currently based mainly on the information provided by the student and the LLM's existing knowledge. They do not necessarily represent the current job market.
+- Thesis topic suggestions are currently based mainly on the information provided by the student and the LLM's existing knowledge. They do not necessarily represent the current job market.
 - The current system does not automatically verify whether suggested thesis topics or career opportunities are available or relevant at a specific university, company, or location.
 - AI-generated recommendations should be treated as decision-support and planning assistance rather than guaranteed workload estimates, thesis recommendations, or career outcomes.
 
