@@ -96,19 +96,24 @@ Initial architecture:
 
 ## Additional AI capability
 
-Possible capability:
+Planned capabilities:
 
-- [ ] Tools / External integration (planned: Moodle iCal)
-- [ ] Memory / Persistent state (possible later extension)
-- [ ] Other capabilities if justified later
+- [ ] Tool calling / Function calling
+- [ ] Memory / Persistent state
+- [ ] RAG (Retrieval-Augmented Generation)
+- [ ] External integration (Moodle iCal)
 
 ### Capability justification
 
-The application may integrate with a student's Moodle calendar/iCal feed to obtain assignment information automatically.
+The application will use tool calling to allow the LLM to select appropriate application functions based on the student's natural-language requests. For example, the AI could retrieve upcoming assignments, update available study time, or replan a study schedule.
 
-This allows the AI component to analyse real assignment descriptions instead of requiring the student to manually copy every assignment into the application.
+A small amount of persistent memory will be used to store relevant student information, such as study preferences, previous workload information, skills, and interests. This can support more personalized recommendations over time.
 
-The important value of AI is therefore not simply generating text, but connecting different types of student information and turning them into personalized suggestions.
+RAG (Retrieval-Augmented Generation) can be used to retrieve relevant information from trusted academic, university, and career sources. This can help ground thesis and career suggestions in external information rather than relying only on the LLM's existing knowledge.
+
+The application will also integrate with the student's Moodle calendar/iCal feed to obtain assignment and deadline information automatically.
+
+These capabilities allow the AI to go beyond simply generating text by retrieving information, using tools, remembering relevant student information, and producing more personalized and grounded recommendations.
 
 ## Setup
 
@@ -156,12 +161,10 @@ Evaluation can check:
 Possible future extensions:
 
 - Student feedback after completing an assignment
-- Persistent storage of actual completion times
 - Personalized workload estimates
 - Natural-language commands such as "What's due this week?"
 - Snoozing or rescheduling reminders
 - Build a persistent student profile containing courses, skills, interests, projects, thesis preferences, and career goals.
 - Improve personalization by comparing assignments and acquired skills over time.
-- Add RAG to retrieve information from trusted academic, university, and career sources.
 - Integrate current job-market data or job-search APIs to support internship and job exploration.
 - Add stronger privacy and security mechanisms for storing and processing student information.
