@@ -164,7 +164,7 @@ Possible future extensions:
 - Personalized workload estimates
 - Natural-language commands such as "What's due this week?"
 - Snoozing or rescheduling reminders
-- Build a persistent student profile containing courses, skills, interests, projects, thesis preferences, and career goals.
+- Expand the persistent student profile with courses, skills, interests, projects, thesis preferences, and career goals.
 - Improve personalization by comparing assignments and acquired skills over time.
 - Integrate current job-market data or job-search APIs to support internship and job exploration.
 - Add stronger privacy and security mechanisms for storing and processing student information.
