@@ -16,30 +16,30 @@ Set up the technical foundation.
 - [x] Python environment
 - [x] Project structure
 - [ ] FastAPI, SQLite, SQLAlchemy
-- [ ] Pydantic
-- [x ] .env configuration
-- [ ] Basic API & database
+- [][Dima] Pydantic
+- [x] .env configuration
+- [ ][Dima] Basic API & database
 - **Deliverable:** [ ] FastAPI + SQLite basic setup
 
 ### 2. Core Application
 Implement core functionality (without AI).
-- [ ] Student, assignment, course, deadline models
+- [ ][Dima] Student, assignment, course, deadline models
 - [ ] CRUD operations
 - [ ] Study availability
-- [ ] Validation & error handling
+- [ ][Dima] Validation & error handling
 - **Deliverable:** [ ] Student → Assignments → Deadlines
 
 ### 3. AI Integration
 Add AI for assignment analysis.
-- [ ] Ollama + Qwen3 4B
-- [ ] Pydantic structured output
-- [ ] Prompt design
+- [ ][Dima] Ollama + Qwen3 4B
+- [ ][Dima] Pydantic structured output
+- [ ][Dima] Prompt design
 - [ ] Task type, difficulty, workload, skills, topics
 - **Deliverable:** [ ] AI assignment analysis service
 
 ### 4. Study Planning
 Calculate workload and recommended start date.
-- [ ] Workload calculation
+- [ ][Dima] Workload calculation
 - [ ] Deadline & priority
 - [ ] Safety buffer
 - [ ] Study schedule
@@ -47,10 +47,10 @@ Calculate workload and recommended start date.
 
 ### 5. User Interface + Notifications
 Enable interaction via Telegram.
-- [ ] Telegram bot
-- [ ] Natural-language queries
-- [ ] /start, /assignments, /today, /week, /plan
-- [ ] Reminder notifications
+- [ ][Dima] Telegram bot
+- [ ][Dima] Natural-language queries
+- [ ][Dima] /start, /assignments, /today, /week, /plan
+- [ ][Dima] Reminder notifications
 - [ ] APScheduler
 - **Deliverable:** [ ] Telegram assistant + reminders
 
@@ -71,8 +71,8 @@ Add thesis assistant, tool calling and RAG.
 
 ### 8. Moodle + Career Integration
 Connect with external data sources.
-- [ ] Moodle iCal integration
-- [ ] Assignment sync
+- [ ][Dima] Moodle iCal integration
+- [ ][Dima] Assignment sync
 - [ ] Career & internship data
 - [ ] Market information
 - **Deliverable:** [ ] Moodle integration + career insights
