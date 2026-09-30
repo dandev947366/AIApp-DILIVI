@@ -31,9 +31,9 @@ Implement core functionality (without AI).
 
 ### 3. AI Integration
 Add AI for assignment analysis.
-- [ ][Dima] Ollama + Qwen3 4B
-- [ ][Dima] Pydantic structured output
-- [ ][Dima] Prompt design
+- [_][Dima] Ollama + Qwen3 4B
+- [_][Vindya] Pydantic structured output
+- [_][Vindya] Prompt design
 - [ ] Task type, difficulty, workload, skills, topics
 - **Deliverable:** [ ] AI assignment analysis service
 
@@ -79,7 +79,7 @@ Connect with external data sources.
 
 ### 9. Testing & Evaluation
 Validate functionality and AI performance.
-- [ ] AI output accuracy
+- [ ] AI output accuracy - Vindya
 - [ ] Workload estimation
 - [ ] System testing (API, DB, Telegram, Moodle, etc.)
 - [ ] End-to-end test
