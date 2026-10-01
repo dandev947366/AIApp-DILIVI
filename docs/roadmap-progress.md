@@ -24,7 +24,7 @@ Set up the technical foundation.
 ### 2. Core Application
 Implement core functionality (without AI).
 - [ ][Dima] Student, assignment, course, deadline models
-- [ ] CRUD operations
+- [ ][Lien] CRUD operations
 - [ ] Study availability
 - [ ][Dima] Validation & error handling
 - **Deliverable:** [ ] Student → Assignments → Deadlines
@@ -56,9 +56,9 @@ Enable interaction via Telegram.
 
 ### 6. Personalization
 Build student profile and track skills.
-- [ ] Student profile (degree, courses, skills, interests)
-- [ ] Assignment → skills
-- [ ] Skill development history
+- [ ][Lien] Student profile (degree, courses, skills, interests)
+- [ ][Lien] Assignment → skills
+- [ ][Lien] Skill development history
 - **Deliverable:** [ ] Personalized profile + skill tracking
 
 ### 7. Advanced AI
@@ -88,9 +88,9 @@ Validate functionality and AI performance.
 
 ### 10. Final Demo & Documentation
 Prepare final delivery.
-- [ ] User guide
-- [ ] Technical documentation
+- [ ][Lien] User guide
+- [ ][Lien] Technical documentation
 - [ ] Architecture diagram
-- [ ] Project report
+- [ ][Lien] Project report
 - [ ] Demo presentation
 - **Deliverable:** [ ] Final system + documentation
