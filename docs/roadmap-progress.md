@@ -63,11 +63,12 @@ Build student profile and track skills.
 
 ### 7. Advanced AI
 Add thesis assistant, tool calling and RAG.
-- [ ] Thesis topic generation
-- [ ] Tool calling (get_assignments, get_profile, etc.)
-- [ ] RAG (ChromaDB + embeddings)
-- [ ] Document processing
+- [ ] [Dan]Thesis topic generation
+- [ ] [Dan]Tool calling (get_assignments, get_profile, etc.)
+- [ ] [Dan]RAG (ChromaDB + embeddings)
+- [ ] [Dan]Document processing
 - **Deliverable:** [ ] Thesis assistant + tools + RAG
+- [Jira progress track](https://hamk-projects-jira.atlassian.net/jira/core/projects/AACH/board?filter=&groupBy=none&atlOrigin=eyJpIjoiMjE4MWFiZGQ2YmJjNDdhZmI5NDM4ZTcxMDAyYzM1NWEiLCJwIjoiaiJ9)
 
 ### 8. Moodle + Career Integration
 Connect with external data sources.
