@@ -1,9 +1,4 @@
-from app.ui import build_ui
-
-def main() -> None:
-    """Entry point script for launching the application."""
-    demo = build_ui()
-    demo.launch()
+from app.ui import demo
 
 if __name__ == "__main__":
-    main()
+    demo.launch(share=False)
