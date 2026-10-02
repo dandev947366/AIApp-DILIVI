@@ -1,50 +1,45 @@
 import gradio as gr
-from src.services.ai_service import generate_response
+
+from src.config import MODEL_ID
+from src.services.ai_service import ai_service
 
 
-def build_ui() -> gr.Blocks:
-    """
-    Constructs the Gradio web interface.
-    
-    Architectural Principle: The UI communicates strictly with `generate_response()`
-    in the AI service layer and never directly with Ollama or the model client.
-    """
-    with gr.Blocks(title="AI Application Starter") as demo:
-        gr.Markdown(
-            """
-            # AI Application Starter
-            
-            Welcome to the AI Application Starter repository.
-            Type a prompt below to interact with your local AI service.
-            """
+def content_to_text(content):
+    if isinstance(content, str):
+        return content
+
+    if isinstance(content, list):
+        return "".join(
+            block.get("text", "")
+            for block in content
+            if isinstance(block, dict) and block.get("type") == "text"
         )
 
-        with gr.Row():
-            user_input = gr.Textbox(
-                lines=3,
-                placeholder="Type your message here...",
-                label="User Prompt",
-            )
+    return ""
 
-        submit_btn = gr.Button("Send", variant="primary")
 
-        with gr.Row():
-            output_box = gr.Textbox(
-                lines=8,
-                label="AI Response",
-                interactive=False,
-            )
+def history_for_service(history):
+    converted = []
 
-        # Connect UI actions exclusively to the service layer function
-        submit_btn.click(
-            fn=generate_response,
-            inputs=user_input,
-            outputs=output_box,
-        )
-        user_input.submit(
-            fn=generate_response,
-            inputs=user_input,
-            outputs=output_box,
-        )
+    for message in history:
+        role = message.get("role")
+        text = content_to_text(message.get("content"))
 
-    return demo
+        if role in {"user", "assistant"} and text:
+            converted.append({"role": role, "content": text})
+
+    return converted
+
+
+def chat_reply(message, history):
+    return ai_service(message, history_for_service(history))
+
+
+demo = gr.ChatInterface(
+    fn=chat_reply,
+    title="AI Study Path and Career Assistant",
+    description=(
+        f"Running with local model: {MODEL_ID}. "
+        "Answers may be incorrect; check deadlines in Moodle."
+    ),
+)

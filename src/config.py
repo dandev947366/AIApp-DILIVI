@@ -1,18 +1,29 @@
 import os
-from dataclasses import dataclass
+
 from dotenv import load_dotenv
 
-# Load environment variables from .env file if present
 load_dotenv()
 
+OLLAMA_HOST = os.getenv(
+    "OLLAMA_HOST",
+    "http://localhost:11434",
+)
 
-@dataclass
-class Config:
-    """Simple configuration object reading environment variables."""
+MODEL_ID = os.getenv(
+    "MODEL_ID",
+    "qwen3:4b",
+)
 
-    ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    model_name: str = os.getenv("MODEL_NAME", "llama3.2")
+OLLAMA_TIMEOUT = float(
+    os.getenv("OLLAMA_TIMEOUT", "300")
+)
 
+TELEGRAM_BOT_TOKEN = os.getenv(
+    "TELEGRAM_BOT_TOKEN",
+    "",
+)
 
-# Instantiate global configuration object
-config = Config()
+ICAL_URL = os.getenv(
+    "ICAL_URL",
+    "",
+)
