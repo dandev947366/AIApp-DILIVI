@@ -4,16 +4,18 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 
-from src.config import ICAL_URL, MODEL_ID, TELEGRAM_BOT_TOKEN
+from src.config import MODEL_ID, TELEGRAM_BOT_TOKEN
 from src.services.ai_service import ai_service
-from src.services.calendar_service import fetch_calendar
+from src.services.calendar_service import upcoming_assignments
 
 MAX_MESSAGE_LENGTH = 4096
 
 HELP_TEXT = (
     "Available commands:\n"
     "/help - this list of commands\n"
-    "/status - show the events from the Moodle calendar\n"
+    "/assignments - show upcoming assignments from the Moodle calendar\n"
+    "/today - show assignments due today\n"
+    "/week - show assignments due in the next 7 days\n"
 )
 
 
@@ -28,25 +30,39 @@ async def help_command(update: Update, context):
     await update.message.reply_text(HELP_TEXT)
 
 
-async def status(update: Update, context):
-    if not ICAL_URL:
-        await update.message.reply_text("Error, ical link is not set")
-        return
-
+async def send_assignments(update: Update, days=None):
     await update.message.chat.send_action(ChatAction.TYPING)
 
-    result = await asyncio.to_thread(fetch_calendar, ICAL_URL)
+    result = await asyncio.to_thread(upcoming_assignments, days)
 
     if result["status"] == "error":
         await update.message.reply_text(result["message"])
         return
 
-    lines = [f"Events found: {len(result['events'])}", ""]
+    assignments = result["assignments"]
 
-    for event in result["events"]:
-        lines.append(f"{event['date']:%d.%m %A}: {event['summary']}")
+    if not assignments:
+        await update.message.reply_text("No assignments found.")
+        return
+
+    lines = [f"Assignments found: {len(assignments)}", ""]
+
+    for item in assignments:
+        lines.append(f"{item.deadline:%d.%m %A %H:%M}: {item.title}")
 
     await update.message.reply_text("\n".join(lines)[:MAX_MESSAGE_LENGTH])
+
+
+async def assignments(update: Update, context):
+    await send_assignments(update)
+
+
+async def today(update: Update, context):
+    await send_assignments(update, days=0)
+
+
+async def week(update: Update, context):
+    await send_assignments(update, days=7)
 
 
 async def chat(update: Update, context):
@@ -72,10 +88,12 @@ def main():
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CommandHandler("status", status))
+    application.add_handler(CommandHandler("assignments", assignments))
+    application.add_handler(CommandHandler("today", today))
+    application.add_handler(CommandHandler("week", week))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
 
-    print(f"Bot is running with local model: {MODEL_ID}. Press Ctrl+C to stop.")
+    print(f"Bot is running with local model: {MODEL_ID}.")
     application.run_polling()
 
 
