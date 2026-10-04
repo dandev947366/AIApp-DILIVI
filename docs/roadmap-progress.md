@@ -16,22 +16,22 @@ Set up the technical foundation.
 - [x] Python environment
 - [x] Project structure
 - [ ] FastAPI, SQLite, SQLAlchemy
-- [][Dima] Pydantic
+- [x][Dima] Pydantic
 - [x] .env configuration
 - [ ][Dima] Basic API & database
 - **Deliverable:** [ ] FastAPI + SQLite basic setup
 
 ### 2. Core Application
 Implement core functionality (without AI).
-- [ ][Dima] Student, assignment, course, deadline models
+- [/][Dima] Student, assignment, course, deadline models
 - [ ][Lien] CRUD operations
 - [ ] Study availability
-- [ ][Dima] Validation & error handling
+- [/][Dima] Validation & error handling
 - **Deliverable:** [ ] Student → Assignments → Deadlines
 
 ### 3. AI Integration
 Add AI for assignment analysis.
-- [_][Dima] Ollama + Qwen3 4B
+- [x][Dima] Ollama + Qwen3 4B
 - [_][Vindya] Pydantic structured output
 - [_][Vindya] Prompt design
 - [ ] Task type, difficulty, workload, skills, topics
@@ -47,9 +47,9 @@ Calculate workload and recommended start date.
 
 ### 5. User Interface + Notifications
 Enable interaction via Telegram.
-- [ ][Dima] Telegram bot
-- [ ][Dima] Natural-language queries
-- [ ][Dima] /start, /assignments, /today, /week, /plan
+- [x][Dima] Telegram bot
+- [/][Dima] Natural-language queries
+- [/][Dima] /start, /assignments, /today, /week, /plan
 - [ ][Dima] Reminder notifications
 - [ ] APScheduler
 - **Deliverable:** [ ] Telegram assistant + reminders
@@ -72,7 +72,7 @@ Add thesis assistant, tool calling and RAG.
 
 ### 8. Moodle + Career Integration
 Connect with external data sources.
-- [ ][Dima] Moodle iCal integration
+- [x][Dima] Moodle iCal integration
 - [ ][Dima] Assignment sync
 - [ ] Career & internship data
 - [ ] Market information
