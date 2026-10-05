@@ -64,7 +64,7 @@ Build student profile and track skills.
 ### 7. Advanced AI
 Add thesis assistant, tool calling and RAG.
 - [ ] [Dan]Thesis topic generation
-- [ ] [Dan]Tool calling (get_assignments, get_profile, etc.)
+- [ ] [Dan/Vindya]Tool calling (get_assignments, get_profile, etc.)
 - [ ] [Dan]RAG (ChromaDB + embeddings)
 - [ ] [Dan]Document processing
 - **Deliverable:** [ ] Thesis assistant + tools + RAG
