@@ -18,7 +18,24 @@ Rules:
 - Use only the supplied assignment information.
 - Do not invent requirements, deadlines, or course details.
 - Treat difficulty and workload as approximate estimates, not facts.
-- If the description is incomplete, make conservative estimates.
+- Base difficulty and workload estimates on the actual scope described.
+- If the description is vague, avoid assuming specific deliverables,
+  technologies, research methods, or project requirements.
+- First identify all concrete information in the title and description.
+- If the assignment clearly specifies a task or deliverables,
+  analyse it normally and identify all supported skills and topics.
+- Only when BOTH the title and description provide no meaningful
+  information about the task, use task_type "unknown",
+  difficulty "easy", estimated_workload_hours 0.0,
+  and empty skills and topics lists.
+- For vague but meaningful descriptions, identify the known task type
+  and relevant skills without inventing specific requirements.
+- Never use the unknown fallback for an assignment that explicitly
+  describes programming, writing, research, or other concrete work.
+- Include only skills and topics directly supported by the
+  title or description.
+- Do not turn generic collaboration skills into subject topics
+  unless project management is explicitly part of the assignment.
 - Use an empty list when skills or topics cannot be identified.
 - Return data matching the required JSON schema.
 """

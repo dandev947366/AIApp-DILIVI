@@ -1,0 +1,59 @@
+
+[
+  {
+    "id": "assignment-01",
+    "category": "successful_case",
+    "title": "Python Data Analysis Project",
+    "description": "Create a Python program using pandas to load a CSV dataset, clean missing values, calculate summary statistics, and create two visualizations using matplotlib.",
+    "expected_task_type": "programming",
+    "expected_skills": ["Python", "pandas", "data cleaning", "data visualization"],
+    "expected_topics": ["data analysis"],
+    "expected_difficulty": "medium",
+    "expected_workload_hours_range": [4, 12],
+    "actual_result": null,
+    "status": "pending"
+  },
+  {
+    "id": "assignment-02",
+    "category": "successful_case",
+    "title": "AI Ethics Research Essay",
+    "description": "Write a 1500-word essay discussing algorithmic bias, data privacy, and ethical concerns in artificial intelligence. Include academic references.",
+    "expected_task_type": "essay",
+    "expected_skills": ["academic writing", "research", "critical thinking"],
+    "expected_topics": ["AI ethics", "algorithmic bias", "data privacy"],
+    "expected_difficulty": "medium",
+    "expected_workload_hours_range": [5, 15],
+    "actual_result": null,
+    "status": "pending"
+  },
+  
+  {
+    "id": "assignment-03",
+    "category": "difficult_case",
+    "title": "Group Project",
+    "description": "Work with your team to prepare the final project. Follow the instructions discussed in class.",
+    "expected_task_type": null,
+    "expected_skills": [],
+    "expected_topics": [],
+    "expected_difficulty": null,
+    "expected_workload_hours_range": null,
+    "expected_behavior": "Avoid inventing specific project requirements, technologies, or topics. Clearly distinguish uncertain estimates from known facts.",
+    "actual_result": null,
+    "status": "pending"
+  },
+  {
+    "id": "assignment-04",
+    "category": "failure_case",
+    "title": "Untitled Assignment",
+    "description": "",
+    "expected_task_type": null,
+    "expected_skills": [],
+    "expected_topics": [],
+    "expected_difficulty": null,
+    "expected_workload_hours_range": null,
+    "expected_behavior": "Handle missing assignment details without inventing requirements. A controlled validation error or conservative structured response is acceptable.",
+    "actual_result": null,
+    "status": "pending"
+  }
+
+]
