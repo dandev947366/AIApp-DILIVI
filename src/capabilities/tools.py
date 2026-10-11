@@ -23,4 +23,68 @@ Note:
 Tools should be deterministic, safe, and scoped to the user problem.
 """
 
-# Implement custom tool functions and schema definitions below if selected.
+# Tool functions for the AI Study Path & Career Assistant
+# Ollama tool schemas and execution logic will be added next.
+
+from src.services.calendar_service import upcoming_assignments
+
+
+def get_upcoming_assignments(days: int = 7) -> dict:
+    """Retrieve upcoming assignments within the next specified days."""
+
+    if not isinstance(days, int) or isinstance(days, bool):
+        return {
+            "status": "error",
+            "message": "Days must be an integer.",
+        }
+
+    if not 0 <= days <= 365:
+        return {
+            "status": "error",
+            "message": "Days must be between 0 and 365.",
+        }
+
+    result = upcoming_assignments(days=days)
+
+    if result["status"] != "ok":
+        return result
+
+    return {
+        "status": "ok",
+        "assignments": [
+            {
+                "title": assignment.title,
+                "course": assignment.course,
+                "deadline": assignment.deadline.isoformat(),
+                "description": assignment.description,
+            }
+            for assignment in result["assignments"]
+        ],
+    }
+
+
+UPCOMING_ASSIGNMENTS_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "get_upcoming_assignments",
+        "description": (
+            "Retrieve a student's upcoming assignments and deadlines "
+            "within a specified number of days."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "days": {
+                    "type": "integer",
+                    "description": "Number of days ahead to check, from 0 to 365.",
+                    "minimum": 0,
+                    "maximum": 365,
+                    "default": 7,
+                }
+            },
+            "required": [],
+        },
+    },
+}
+
+
