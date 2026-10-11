@@ -27,3 +27,8 @@ ICAL_URL = os.getenv(
     "ICAL_URL",
     "",
 )
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "sqlite:///./student_context.db",
+)
