@@ -1,0 +1,56 @@
+services:
+  # Ollama: LLM inference server
+  ollama:
+    image: ollama/ollama:latest
+    container_name: daia-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./docker/entrypoint-ollama.sh:/entrypoint.sh
+    environment:
+      MODEL_ID: ${MODEL_ID:-qwen2.5:7b}
+      OLLAMA_KEEP_ALIVE: 24h
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list | grep -Fq '${MODEL_ID:-qwen2.5:7b}' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    restart: unless-stopped
+
+  # Backend: Python application and Gradio UI
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: daia-backend
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./data:/app/data
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./scripts:/app/scripts
+      - ./app:/app/app
+    environment:
+      # Make /app importable so `from src...` and `from app...` both work
+      PYTHONPATH: /app
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///./data/student_context.db}
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
+      MODEL_ID: ${MODEL_ID:-qwen2.5:7b}
+      OLLAMA_TIMEOUT: ${OLLAMA_TIMEOUT:-300}
+      MOODLE_USER_ID: ${MOODLE_USER_ID:-66944}
+      STUDENT_DB_ID: ${STUDENT_DB_ID:-1}
+      PYTHONUNBUFFERED: "1"
+    working_dir: /app
+    command: ["/wait-for-ollama.sh", "python", "-u", "app/ui.py"]
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+    driver: local
