@@ -1,34 +1,34 @@
 import os
-
+from dataclasses import dataclass
 from dotenv import load_dotenv
 
+# Load environment variables from .env file if present
 load_dotenv()
 
-OLLAMA_HOST = os.getenv(
-    "OLLAMA_HOST",
-    "http://localhost:11434",
-)
+# ✅ SMART DOCKER DETECTION
+# If running inside Docker, default to the Docker Compose service name ('ollama').
+# If running locally on your Mac/PC, default to 'localhost'.
+IS_DOCKER = os.path.exists("/.dockerenv") or os.getenv("DOCKER_ENV") == "true"
+DEFAULT_OLLAMA_HOST = "http://ollama:11434" if IS_DOCKER else "http://localhost:11434"
 
-MODEL_ID = os.getenv(
-    "MODEL_ID",
-    "qwen3:4b",
-)
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", DEFAULT_OLLAMA_HOST)
+MODEL_ID = os.getenv("MODEL_ID", "qwen2.5:7b")
+OLLAMA_TIMEOUT = float(os.getenv("OLLAMA_TIMEOUT", "300"))
 
-OLLAMA_TIMEOUT = float(
-    os.getenv("OLLAMA_TIMEOUT", "300")
-)
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+ICAL_URL = os.getenv("ICAL_URL", "")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/student_context.db")
 
-TELEGRAM_BOT_TOKEN = os.getenv(
-    "TELEGRAM_BOT_TOKEN",
-    "",
-)
+API_PORT = int(os.getenv("API_PORT", "8000"))
 
-ICAL_URL = os.getenv(
-    "ICAL_URL",
-    "",
-)
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "sqlite:///./student_context.db",
-)
+@dataclass
+class Config:
+    """Simple configuration object reading environment variables."""
+
+    ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_HOST)
+    model_name: str = os.getenv("MODEL_NAME", "llama3.2")
+
+
+# Instantiate global configuration object
+config = Config()
