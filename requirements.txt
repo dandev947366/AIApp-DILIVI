@@ -35,3 +35,5 @@ httpx>=0.24.0
 pypdf
 alembic
 pymupdf
+mcp>=1.2.0
+httpx

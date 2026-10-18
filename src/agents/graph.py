@@ -9,6 +9,7 @@ from src.agents.supervisor import supervisor_node
 from src.agents.study_planner import study_planner_node
 from src.agents.skill_analyst import skill_analyst_node
 from src.agents.general_chat import general_chat_node
+from src.agents.job_search import job_search_node
 
 
 def route_after_supervisor(state: AgentState) -> str:
@@ -17,6 +18,8 @@ def route_after_supervisor(state: AgentState) -> str:
         return "study_planner"
     elif "skill_analysis" in tasks:
         return "skill_analyst"
+    elif "job_search" in tasks:
+        return "job_search"
     return "general_chat"  # <--- DEFAULT IS NOW GENERAL CHAT
 
 
@@ -53,6 +56,7 @@ def build_agent_graph():
     graph.add_node("supervisor", supervisor_node)
     graph.add_node("study_planner", study_planner_node)
     graph.add_node("skill_analyst", skill_analyst_node)
+    graph.add_node("job_search", job_search_node)
     graph.add_node("general_chat", general_chat_node)
     graph.add_node("final_response", final_response_node)
 
@@ -65,6 +69,7 @@ def build_agent_graph():
         {
             "study_planner": "study_planner",
             "skill_analyst": "skill_analyst",
+            "job_search": "job_search",
             "general_chat": "general_chat",
         },
     )
