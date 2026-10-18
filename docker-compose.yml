@@ -1,5 +1,4 @@
 services:
-  # Ollama: LLM inference server
   ollama:
     image: ollama/ollama:latest
     container_name: daia-ollama
@@ -20,7 +19,6 @@ services:
       start_period: 120s
     restart: unless-stopped
 
-  # Backend: Python application and Gradio UI
   backend:
     build:
       context: .
@@ -38,7 +36,6 @@ services:
       - ./scripts:/app/scripts
       - ./app:/app/app
     environment:
-      # Make /app importable so `from src...` and `from app...` both work
       PYTHONPATH: /app
       DATABASE_URL: ${DATABASE_URL:-sqlite:///./data/student_context.db}
       OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
@@ -47,6 +44,7 @@ services:
       MOODLE_USER_ID: ${MOODLE_USER_ID:-66944}
       STUDENT_DB_ID: ${STUDENT_DB_ID:-1}
       PYTHONUNBUFFERED: "1"
+      TUTOR_MCP_BINARY: /usr/local/bin/tutor-mcp
     working_dir: /app
     command: ["/wait-for-ollama.sh", "python", "-u", "app/ui.py"]
     restart: unless-stopped
