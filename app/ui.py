@@ -994,7 +994,7 @@ def chat(message, history, session_state):
 
 
 def user_submit(message, history, session):
-    """Handle chat using Gradio's messages format."""
+    """Handle chat using Gradio's messages format (streaming)."""
 
     history = list(history or [])
 
@@ -1039,25 +1039,51 @@ def user_submit(message, history, session):
         }
     )
 
-    yield "", history
+    # Login guard — the agent needs a moodle_user_id.
+    moodle_user_id = (session or {}).get("moodle_user_id")
+    if not moodle_user_id:
+        history.append(
+            {
+                "role": "assistant",
+                "content": (
+                    "Please create an account or log in using the **Account** "
+                    "section before asking questions about personal student data."
+                ),
+            }
+        )
+        yield "", history
+        return
 
-    try:
-        answer = chat(message, history, session)
-        answer = str(answer)
-
-    except Exception as exc:
-        traceback.print_exc()
-        answer = f"An error occurred: " f"{type(exc).__name__}: {exc}"
-
-    # Append the assistant's response in the expected format.
+    # Placeholder assistant bubble that gets rewritten on every update.
     history.append(
         {
             "role": "assistant",
-            "content": answer,
+            "content": "🔍 Starting…",
         }
     )
-
     yield "", history
+
+    # Lazy import to avoid circular imports at module load time.
+    from src.services.agent_service import agent_service_stream
+
+    try:
+        for text, is_final in agent_service_stream(message, moodle_user_id):
+            history[-1]["content"] = text
+            yield "", history
+
+            if is_final:
+                return
+
+    except Exception as exc:
+        traceback.print_exc()
+        history[-1]["content"] = f"An error occurred: `{type(exc).__name__}: {exc}`"
+        yield "", history
+        return
+    if not history[-1]["content"] or history[-1]["content"] == "🔍 Starting…":
+        history[-1]["content"] = (
+            "The assistant finished without producing an answer. " "Please try again."
+        )
+        yield "", history
 
 
 # ============================================================
