@@ -10,5 +10,6 @@ class AgentState(TypedDict):
     tasks: list[str]
     study_plan_result: str
     skill_analysis_result: str
+    job_search_result: str
     general_chat_result: str
     final_response: str

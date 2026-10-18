@@ -13,9 +13,9 @@ from src.agents.state import AgentState
 
 
 class RoutingDecision(BaseModel):
-    tasks: list[Literal["study_planning", "skill_analysis", "general_chat"]] = Field(
-        default_factory=list
-    )
+    tasks: list[
+        Literal["study_planning", "skill_analysis", "job_search", "general_chat"]
+    ] = Field(default_factory=list)
 
 
 SUPERVISOR_PROMPT = """You are a smart routing agent for an AI assistant.
@@ -27,7 +27,9 @@ Available Agents:
    homework, exams, quizzes, time management, study plans, labs, and projects.
 2. "skill_analysis": Handles questions about the user's technical skills,
    career goals, skill gaps, resume, or how to improve abilities.
-3. "general_chat": Handles general knowledge, course information,
+3. "job_search": Handles questions about job opportunities, applications,
+   interviews, or career advice.
+4. "general_chat": Handles general knowledge, course information,
    transcripts, greetings, profile updates, or anything else.
 
 Rules:
