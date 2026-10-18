@@ -20,6 +20,7 @@ Design notes
 
 import re
 import httpx
+from src.tools.jobs_db import save_jobs_to_db
 
 JOBICY_API_URL = "https://jobicy.com/api/v2/remote-jobs"
 DEFAULT_TIMEOUT = 20.0
@@ -286,6 +287,10 @@ def search_jobs_mcp(query: str = "", geo: str = "", limit: int = 5) -> str:
 
         jobs = jobs[: max(1, int(limit or 5))]
 
+        # Save to DB for the Job Market sidebar
+        if jobs:
+            save_jobs_to_db(jobs)
+
         if not jobs:
             return (
                 f"No jobs found for query={query!r} geo={geo!r}. "
@@ -499,6 +504,10 @@ def search_jobs_for_student(
     scored.sort(key=lambda t: t[0], reverse=True)
 
     matched_jobs = [t for t in scored if t[0] >= MIN_SCORE][:limit]
+
+    # Save to DB for the Job Market sidebar
+    if matched_jobs:
+        save_jobs_to_db([job for score, matched, job in matched_jobs])
 
     if not matched_jobs:
         return (

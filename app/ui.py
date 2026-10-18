@@ -399,6 +399,7 @@ def on_app_load(session_state):
             refresh_student_identity({}),
             refresh_profile({}),
             refresh_system_status({}),
+            refresh_job_health(),
             gr.update(visible=True),  # login_form
             gr.update(visible=False),  # create_form
             gr.update(visible=False),  # logout_btn
@@ -427,6 +428,7 @@ def on_app_load(session_state):
             refresh_student_identity({}),
             refresh_profile({}),
             refresh_system_status({}),
+            refresh_job_health(),
             gr.update(visible=True),
             gr.update(visible=False),
             gr.update(visible=False),
@@ -439,6 +441,7 @@ def on_app_load(session_state):
         refresh_student_identity(session),
         refresh_profile(session),
         refresh_system_status(session),
+        refresh_job_health(),
         gr.update(visible=False),  # login_form
         gr.update(visible=False),  # create_form
         gr.update(visible=True),  # logout_btn
@@ -1427,6 +1430,7 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
             identity_box,
             profile_box,
             system_box,
+            job_box,
             login_form,
             create_form,
             logout_btn,
@@ -1532,6 +1536,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_profile,
         inputs=[session_state],
         outputs=[profile_box],
+    ).then(
+        refresh_job_health,
+        inputs=[],
+        outputs=[job_box],
     )
 
     msg.submit(
@@ -1542,6 +1550,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_profile,
         inputs=[session_state],
         outputs=[profile_box],
+    ).then(
+        refresh_job_health,
+        inputs=[],
+        outputs=[job_box],
     )
 
     # ========================================================
@@ -1556,6 +1568,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_profile,
         inputs=[session_state],
         outputs=[profile_box],
+    ).then(
+        refresh_job_health,
+        inputs=[],
+        outputs=[job_box],
     )
 
     # ========================================================
