@@ -186,22 +186,51 @@ def _from_snapshot() -> dict[str, Any] | None:
 # ----------------------------------------------------------------------
 # Public API
 # ----------------------------------------------------------------------
+# src/collectors/health.py
+from sqlalchemy import func
+from src.database import SessionLocal
+from src.models.job_models import JobModel, JobCollectionRunModel
 
 
-def get_collection_health() -> dict[str, Any]:
-    """Return the health report for the job collector."""
-    for probe in (_from_sqlite, _from_status_file, _from_snapshot):
-        try:
-            report = probe()
-        except Exception:  # noqa: BLE001 — never let health checks break the UI
-            continue
-        if report is not None:
-            return report
+def get_collection_health() -> dict:
+    try:
+        with SessionLocal() as db:
+            # Count active jobs
+            active_jobs = db.query(JobModel).filter(JobModel.is_active == True).count()
 
-    return {
-        "health": "unknown",
-        "active_jobs": 0,
-        "last_successful_run_at": "Never",
-        "by_country": {},
-        "source": "none",
-    }
+            # Get last successful run
+            last_run = (
+                db.query(JobCollectionRunModel)
+                .order_by(JobCollectionRunModel.run_at.desc())
+                .first()
+            )
+            last_run_time = (
+                last_run.run_at.strftime("%Y-%m-%d %H:%M:%S") if last_run else "Never"
+            )
+
+            # Group by country (Limiting to top 5 so the sidebar doesn't get massive)
+            by_country = {}
+            if active_jobs > 0:
+                results = (
+                    db.query(JobModel.country, func.count(JobModel.job_id))
+                    .filter(JobModel.is_active == True)
+                    .group_by(JobModel.country)
+                    .order_by(func.count(JobModel.job_id).desc())
+                    .limit(5)
+                    .all()
+                )
+                by_country = {country or "Unknown": count for country, count in results}
+
+            return {
+                "health": "healthy" if active_jobs > 0 else "unknown",
+                "active_jobs": active_jobs,
+                "last_successful_run_at": last_run_time,
+                "by_country": by_country,
+            }
+    except Exception as e:
+        return {
+            "health": "error",
+            "active_jobs": 0,
+            "last_successful_run_at": "Error",
+            "by_country": {},
+        }
