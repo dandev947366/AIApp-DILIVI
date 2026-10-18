@@ -1,6 +1,6 @@
 # Environment variables (Never commit secrets or local config)
 .env
-
+data/
 # Python bytecode and caches
 __pycache__/
 *.py[cod]

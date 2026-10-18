@@ -32,10 +32,10 @@ Implement core functionality (without AI).
 ### 3. AI Integration
 Add AI for assignment analysis.
 - [x][Dima] Ollama + Qwen3 4B
-- [_][Vindya] Pydantic structured output
-- [_][Vindya] Prompt design
-- [ ] Task type, difficulty, workload, skills, topics
-- **Deliverable:** [ ] AI assignment analysis service
+- [x][Vindya] Pydantic structured output
+- [x][Vindya] Prompt design
+- [x] Task type, difficulty, workload, skills, topics
+- **Deliverable:** [x] AI assignment analysis service
 
 ### 4. Study Planning
 Calculate workload and recommended start date.
@@ -64,7 +64,7 @@ Build student profile and track skills.
 ### 7. Advanced AI
 Add thesis assistant, tool calling and RAG.
 - [ ] [Dan]Thesis topic generation
-- [ ] [Dan/Vindya]Tool calling (get_assignments, get_profile, etc.)
+- [/] [Dan/Vindya]Tool calling (calendar tool implemented and tested; other tools pending)
 - [ ] [Dan]RAG (ChromaDB + embeddings)
 - [ ] [Dan]Document processing
 - **Deliverable:** [ ] Thesis assistant + tools + RAG
@@ -80,7 +80,7 @@ Connect with external data sources.
 
 ### 9. Testing & Evaluation
 Validate functionality and AI performance.
-- [ ] AI output accuracy - Vindya
+- [x][Vindya] AI output accuracy (initial 4-case evaluation)
 - [ ] Workload estimation
 - [ ] System testing (API, DB, Telegram, Moodle, etc.)
 - [ ] End-to-end test
@@ -90,7 +90,7 @@ Validate functionality and AI performance.
 Prepare final delivery.
 - [ ][Lien] User guide
 - [ ][Lien] Technical documentation
-- [ ] Architecture diagram
+- [ ][Vindya] Architecture diagram
 - [ ][Lien] Project report
 - [ ] Demo presentation
 - **Deliverable:** [ ] Final system + documentation
