@@ -1197,6 +1197,60 @@ def refresh_job_health():
 
 
 # ============================================================
+# SIDEBAR: TUTOR PROGRESS
+# ============================================================
+
+
+async def refresh_tutor_state(session_state):
+    session = session_state or {}
+    if not session.get("student_db_id"):
+        return (
+            "### 🎓 Tutor Progress\n\nLog in to view your adaptive learning progress."
+        )
+
+    try:
+        # Lazy import to avoid circular dependencies and heavy startup costs
+        from src.mcp.tutor_mcp import call_tutor_tool
+
+        async def _fetch():
+            # Fetch alerts and the next recommended activity
+            alerts = await call_tutor_tool("get_pending_alerts", {})
+            next_activity = await call_tutor_tool("get_next_activity", {})
+            return alerts, next_activity
+
+        alerts, next_activity = await _fetch()
+
+        def _format_response(resp):
+            """Helper to extract text from MCP content objects."""
+            if not resp:
+                return "None"
+            if isinstance(resp, str):
+                return resp
+            if isinstance(resp, list):
+                return "\n".join(
+                    getattr(item, "text", str(item))
+                    for item in resp
+                    if getattr(item, "type", "") == "text"
+                )
+            return str(resp)
+
+        alerts_text = _format_response(alerts)
+        next_act_text = _format_response(next_activity)
+
+        return f"""### 🎓 Tutor Progress
+
+**Pending Alerts:**
+{alerts_text}
+
+**Next Activity:**
+{next_act_text}
+"""
+    except Exception as exc:
+        traceback.print_exc()
+        return f"### 🎓 Tutor Progress\n\nUnable to load data: `{type(exc).__name__}: {exc}`"
+
+
+# ============================================================
 # SIDEBAR: SYSTEM STATUS
 # ============================================================
 
@@ -1287,7 +1341,7 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
 
             chatbot = gr.Chatbot(
                 label="Chat with DAIA",
-                height=470,
+                height=750,
             )
 
             msg = gr.Textbox(
@@ -1408,6 +1462,15 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
 
                 refresh_job_btn = gr.Button("Refresh Job Data")
 
+            # ------------------------------------------------
+            # TUTOR PROGRESS
+            # ------------------------------------------------
+            with gr.Accordion("🎓 Tutor Progress", open=False):
+                tutor_box = gr.Markdown(
+                    value="Click refresh to load your learning progress."
+                )
+                refresh_tutor_btn = gr.Button("Refresh Tutor State")
+
     # ========================================================
     # ACCOUNT MODE SWITCHING
     # ========================================================
@@ -1435,6 +1498,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
             create_form,
             logout_btn,
         ],
+    ).then(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
     # ========================================================
@@ -1464,6 +1531,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_system_status,
         inputs=[session_state],
         outputs=[system_box],
+    ).then(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
     # ========================================================
@@ -1494,6 +1565,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_system_status,
         inputs=[session_state],
         outputs=[system_box],
+    ).then(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
     # ========================================================
@@ -1522,6 +1597,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_system_status,
         inputs=[session_state],
         outputs=[system_box],
+    ).then(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
     # ========================================================
@@ -1540,6 +1619,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_job_health,
         inputs=[],
         outputs=[job_box],
+    ).then(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
     msg.submit(
@@ -1554,6 +1637,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_job_health,
         inputs=[],
         outputs=[job_box],
+    ).then(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
     # ========================================================
@@ -1572,6 +1659,10 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_job_health,
         inputs=[],
         outputs=[job_box],
+    ).then(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
     # ========================================================
@@ -1594,6 +1685,12 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
         refresh_job_health,
         inputs=[],
         outputs=[job_box],
+    )
+
+    refresh_tutor_btn.click(
+        refresh_tutor_state,
+        inputs=[session_state],
+        outputs=[tutor_box],
     )
 
 

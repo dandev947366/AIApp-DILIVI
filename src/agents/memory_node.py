@@ -14,7 +14,7 @@ def memory_node(state: AgentState) -> dict:
     student_id = state["student_id"]
     profile = get_student_profile(student_id)
     skills = get_student_skills(student_id)
-    upcoming = get_upcoming_assignments(student_id, days=14)
+    upcoming = get_upcoming_assignments(student_id, days=45)
     overdue = get_overdue_assignments(student_id)
     recent_messages = get_recent_messages(student_id, limit=5)
 
