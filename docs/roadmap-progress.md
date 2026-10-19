@@ -39,19 +39,19 @@ Add AI for assignment analysis.
 
 ### 4. Study Planning
 Calculate workload and recommended start date.
-- [ ][Dima] Workload calculation
+- [x][Dima] Workload calculation
 - [ ] Deadline & priority
-- [ ] Safety buffer
+- [x][Dima] Safety buffer
 - [ ] Study schedule
 - **Deliverable:** [ ] Assignment → AI estimate → Recommended start date
 
 ### 5. User Interface + Notifications
 Enable interaction via Telegram.
 - [x][Dima] Telegram bot
-- [/][Dima] Natural-language queries
-- [/][Dima] /start, /assignments, /today, /week, /plan
-- [ ][Dima] Reminder notifications
-- [ ] APScheduler
+- [x][Dima] Natural-language queries
+- [x][Dima] /start, /assignments, /today, /week, /plan
+- [x][Dima] Reminder notifications
+- [x][Dima] APScheduler
 - **Deliverable:** [ ] Telegram assistant + reminders
 
 ### 6. Personalization
