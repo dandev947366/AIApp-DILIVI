@@ -8,7 +8,7 @@ Your personalized study planner, student profile, and AI career assistant. DAIA 
 ## ✨ Key Features
 
 ### 🔐 Account Creation & Moodle Sync
-Create your account effortlessly by linking your Moodle profile. DAIA syncs your calendar, extracting upcoming deadlines and course information automatically.
+Create your account by linking your Moodle profile. DAIA syncs your calendar, extracting upcoming deadlines and course information automatically.
 
 ![Account Creation UI](../imgs/account-create.png)
 *Secure account creation with Moodle calendar export URL.*
@@ -18,6 +18,9 @@ Create your account effortlessly by linking your Moodle profile. DAIA syncs your
 
 ![Account Sync Success](../imgs/account-new.png)
 *Successful account creation and calendar synchronization.*
+
+![Logged Out View](../imgs/dashboard-noaccount.png)
+*Secure logged-out dashboard state.*
 
 ### 🎓 Personalized Student Profile
 DAIA maintains a dynamic profile of your academic journey, including your degree, preferred study times, career goals, interests, and a breakdown of your skills.
@@ -79,13 +82,10 @@ DAIA is built for privacy and efficiency, utilizing Docker for containerization 
 ![Backend Logs](../imgs/docker-terminal-backend.png)
 *Backend logs confirming successful connection to the local Ollama instance and running on localhost.*
 
-![Logged Out View](../imgs/dashboard-noaccount.png)
-*Clean, secure logged-out dashboard state.*
-
 ---
 
 ## 🚀 Getting Started
-*(Add instructions here on how to run your app, e.g., `docker compose up -d`)*
+*check out SETUP.md at root folder**
 
 ## 🛠️ Tech Stack
 *   **Frontend**: *(e.g., Gradio, React)*
