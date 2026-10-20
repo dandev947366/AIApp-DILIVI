@@ -18,16 +18,16 @@ Set up the technical foundation.
 - [ ] FastAPI, SQLite, SQLAlchemy
 - [x][Dima] Pydantic
 - [x] .env configuration
-- [ ][Dima] Basic API & database
+- [ ] Basic API & database
 - **Deliverable:** [ ] FastAPI + SQLite basic setup
 
 ### 2. Core Application
 Implement core functionality (without AI).
-- [/][Dima] Student, assignment, course, deadline models
+- [x][Dima] Student, assignment, course, deadline models
 - [ ][Lien] CRUD operations
 - [ ] Study availability
-- [/][Dima] Validation & error handling
-- **Deliverable:** [ ] Student → Assignments → Deadlines
+- [x][Dima] Validation & error handling
+- **Deliverable:** [x] Student → Assignments → Deadlines
 
 ### 3. AI Integration
 Add AI for assignment analysis.
@@ -40,10 +40,9 @@ Add AI for assignment analysis.
 ### 4. Study Planning
 Calculate workload and recommended start date.
 - [x][Dima] Workload calculation
-- [ ] Deadline & priority
 - [x][Dima] Safety buffer
 - [ ] Study schedule
-- **Deliverable:** [ ] Assignment → AI estimate → Recommended start date
+- **Deliverable:** [x] Assignment → AI estimate → Recommended start date
 
 ### 5. User Interface + Notifications
 Enable interaction via Telegram.
@@ -52,7 +51,7 @@ Enable interaction via Telegram.
 - [x][Dima] /start, /assignments, /today, /week, /plan
 - [x][Dima] Reminder notifications
 - [x][Dima] APScheduler
-- **Deliverable:** [ ] Telegram assistant + reminders
+- **Deliverable:** [x] Telegram assistant + reminders
 
 ### 6. Personalization
 Build student profile and track skills.
@@ -73,7 +72,7 @@ Add thesis assistant, tool calling and RAG.
 ### 8. Moodle + Career Integration
 Connect with external data sources.
 - [x][Dima] Moodle iCal integration
-- [ ][Dima] Assignment sync
+- [x][Dima] Assignment sync
 - [ ] Career & internship data
 - [ ] Market information
 - **Deliverable:** [ ] Moodle integration + career insights
