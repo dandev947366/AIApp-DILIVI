@@ -31,7 +31,7 @@ class OllamaModelClient:
     ):
         self.base_url = base_url or config.ollama_base_url
         self.model_name = model_name or config.model_name
-        self._client = ollama.Client(host=self.base_url)
+        self._client = Client(host=self.base_url)
 
     def generate(self, prompt: str) -> str:
         """
