@@ -10,7 +10,7 @@ from src.models.model_client import (
     model_client,
 )
 from src.schemas.responses import UserRequest, AIResponse
-from src.services.calendar_service import upcoming_assignments
+from src.services.calendar_service import student_assignments, upcoming_assignments
 
 
 class AIService:
@@ -152,13 +152,16 @@ def build_messages(question: str, evidence, history=None):
     ]
 
 
-def ai_service(question: str, history=None) -> str:
+def ai_service(question: str, history=None, student_id=None) -> str:
     cleaned_question = (question or "").strip()
 
     if not cleaned_question:
         return "Please enter a question."
 
-    evidence = upcoming_assignments().get("assignments", [])
+    if student_id is None:
+        evidence = upcoming_assignments().get("assignments", [])
+    else:
+        evidence = student_assignments(student_id).get("assignments", [])
 
     try:
         response = model_client.chat(

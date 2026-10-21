@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from src.config import BUFFER_DAYS, HOURS_PER_DAY
 from src.services.assignment_analysis_service import analyze_assignment
-from src.services.calendar_service import upcoming_assignments
+from src.services.calendar_service import student_assignments
 
 
 def recommended_start(deadline, hours):
@@ -11,8 +11,8 @@ def recommended_start(deadline, hours):
     return deadline.date() - timedelta(days=work_days + BUFFER_DAYS)
 
 
-def build_plan(analyses):
-    result = upcoming_assignments()
+def build_plan(student_id, analyses):
+    result = student_assignments(student_id)
 
     if result["status"] == "error":
         return result
