@@ -89,17 +89,16 @@ The solution can be viewed as three connected levels:
 
 ### 1.6 Scope
 | Phase | Feature | Status |
-| 1 | Moodle iCal -> SQLite | ✅ |
-| 2 | Deterministic DB tools | ✅ |
-| 3 | LangGraph agents (memory, supervisor, planner, analyst) | ✅ |
-| 4 | Conversation history + memory extraction | ✅ |
-| 5 | Authentication, login/logout, session cahe | ✅ |
-| 6 | Tutor MCP Server, adaptive learning tools | ✅ |
-| 7 | Career assistant + live job-market data | ✅ |
-| 8 | Telegram bot intergration | ✅ |
-| 9 | RAG career advisor | 🚧 planned |
-
-
+|:---:|---|:---:|
+| 1 | Moodle iCal → SQLite | ✅ Completed |
+| 2 | Deterministic DB tools | ✅ Completed |
+| 3 | LangGraph agents (memory, supervisor, planner, analyst) | ✅ Completed |
+| 4 | Conversation history + memory extraction | ✅ Completed |
+| 5 | Authentication, login/logout, session cache | ✅ Completed |
+| 6 | Tutor MCP Server, adaptive learning tools | ✅ Completed |
+| 7 | Career assistant + live job-market data | ✅ Completed |
+| 8 | Telegram bot integration | ✅ Completed |
+| 9 | RAG career advisor | 🚧 Planned |
 
 #  2. Architecture
 
@@ -128,28 +127,40 @@ Browser → require_session() → agent_service
 After every response, the LLM extracts durable preferences ("I prefer studying in the evening") and merge them into `student_profiles`. The next request's Memory Node sees the updated profile - this is how DAIA learns.
 
 ## 2.5 Project structure
-app/ui.py Gradio UI + login/logout screens
-src/services/auth_service.py Register / login / logout
-src/services/session_store.py Authoritative sessions (SQLite)
-src/services/session_cache.py TTL caches (context + answer)
-src/services/agent_service.py Main orchestration
-src/services/telegram_bot.py Telegram integration
-src/services/career_matcher.py Jobicy search + scoring
-src/services/moodle_sync_service.py iCal fetch / parse / upsert
-src/agents/ LangGraph nodes + graph
-src/mcp/tutor/ 46-tool Tutor MCP server
-├── curriculum.py Domain & revision management
-├── cycle.py Learning cycle & routing
-├── assessment.py Frozen assessments & evidence
-├── learner_model.py BKT / FSRS + affect
-├── analytics.py Snapshots & replay
-└── availability.py Scheduling & notifications
-src/tools/ Deterministic DB queries
-src/memory/ Chat history + preference extraction
-src/models/ ORM models
-data/student_context.db SQLite
-docker/ entrypoint + wait-for scripts
-tests/ Unit + integration tests
+
+# AIApp-DILIVI — Project Structure
+
+## Application Architecture
+
+| File / Directory | Description |
+|---|---|
+| `app/ui.py` | Gradio UI + login/logout screens |
+| `src/services/auth_service.py` | Register / login / logout |
+| `src/services/session_store.py` | Authoritative sessions (SQLite) |
+| `src/services/session_cache.py` | TTL caches (context + answer) |
+| `src/services/agent_service.py` | Main orchestration |
+| `src/services/telegram_bot.py` | Telegram integration |
+| `src/services/career_matcher.py` | Jobicy search + scoring |
+| `src/services/moodle_sync_service.py` | iCal fetch / parse / upsert |
+| `src/agents/` | LangGraph nodes + graph |
+| `src/mcp/tutor/` | 46-tool Tutor MCP server |
+| `src/tools/` | Deterministic DB queries |
+| `src/memory/` | Chat history + preference extraction |
+| `src/models/` | ORM models |
+| `data/student_context.db` | SQLite database |
+| `docker/` | Entrypoint + wait-for scripts |
+| `tests/` | Unit + integration tests |
+
+## Tutor MCP Server Modules
+
+| File | Description |
+|---|---|
+| `curriculum.py` | Domain & revision management |
+| `cycle.py` | Learning cycle & routing |
+| `assessment.py` | Frozen assessments & evidence |
+| `learner_model.py` | BKT / FSRS + affect |
+| `analytics.py` | Snapshots & replay |
+| `availability.py` | Scheduling & notifications |
 
 ## 2.6 Tutor MCP Server - 46 tools in 6 categories
 The tutor is an adtaptive, mastery-based learning system exposed as an MCP server. The LLM selects tools by name; all pedagogical rules - what counts as mastery, when to reassess, which misconceptions to surface - are enforced deterministically in code. This prevents the LLM from "hallucunating progress" or skipping prerequisites.
@@ -160,7 +171,9 @@ Six tool categories:
 4. Learner model: 7 tools: BKT/FSRS mastery estimates, affects, preferences, if-then practice commitments.
 5. Analytics: 4 tools: Per-concept progress, retention alert, and replayable decision snapshots.
 6. Availability: 3 tools: Timezone, DND windows, consent-gated notifications.
+
 **Three design principles that matter most:** 
+
 * Versioned curriculum: Every curriculum edit is an immutable revision checked against 'expected_version'; stale writers are rejected. Learners never lose progress when the domain is reorganised.
 * Frozen assessments: 'prepare_assessment_attempt' locks the tak and rubric before the learner sees it. Grading cannot drift after the fact.
 * Replayable decision: 'get_decision_replay_summary' reconstructs every pedagogical choice from stored snapshots - the explainability layer that distinguishes DAIA from blacj-box chatbot and aligns with EU AI Act transparency expectations.
@@ -210,17 +223,21 @@ by `extract_memory_updates` and the MCP tool schemas. Larger models
 
 ## 4.2 One time set up
 
-# 1. Make entrypoints executable (macOS / Linux / WSL / Git Bash)
-chmod +x docker/entrypoint-ollama.sh docker/wait-for-ollama.sh
+**1. Make entrypoints executable (macOS / Linux / WSL / Git Bash)**
 
-# 2. Configure the model
-#    Edit .env → MODEL_ID=llama3.2:3b
+`chmod +x docker/entrypoint-ollama.sh docker/wait-for-ollama.sh`
 
-# 3. Start
-docker compose up -d
+**2. Configure the model**
 
-# 4. Wait for the model download (first run only)
-docker compose logs -f ollama     # wait for "success"
+Edit .env → MODEL_ID=llama3.2:3b
+
+** 3. Start**
+
+`docker compose up -d`
+
+** 4. Wait for the model download (first run only)**
+
+`docker compose logs -f ollama`     # wait for "success"
 
 ## 4.3 Run
 Open http://localhost:7860
@@ -231,20 +248,57 @@ Open http://localhost:7860
 
 ## 4.4 Everyday commands
 
-docker compose up -d                     # start
-docker compose down                      # stop (keep data)
-docker compose down -v                   # reset (⚠️ wipes data)
-docker compose up -d --force-recreate backend   # rebuild after code change
-docker compose ps                        # status
+# Docker Compose Commands
+
+| Command | Description |
+|---|---|
+| `docker compose up -d` | 🚀 Start all services in the background |
+| `docker compose down` | 🛑 Stop and remove containers (keep data volumes) |
+| `docker compose down -v` | ⚠️ Reset everything and remove volumes (wipes persisted data) |
+| `docker compose up -d --force-recreate backend` | 🔄 Recreate the backend container after code changes |
+| `docker compose ps` | 📊 Check the status of containers |
+
+## Quick Reference
+
+### Start services
+```bash
+docker compose up -d
+```
+
+### Stop services (keep data)
+```bash
+docker compose down
+```
+
+### Reset services (⚠️ deletes persisted volume data)
+```bash
+docker compose down -v
+```
+
+### Recreate backend after code changes
+```bash
+docker compose up -d --force-recreate backend
+```
+
+### Check service status
+```bash
+docker compose ps
+```
+
+> **Note:** `docker compose down -v` removes Compose-managed named and anonymous volumes. Data stored in bind-mounted host directories is generally not deleted. Also, `--force-recreate` recreates the backend container but does not rebuild its image; use `docker compose up -d --build backend` if you need to rebuild the image after changing code or dependencies.
 
 ## 4.5 Troubleshooting
+
+### 4.5 Troubleshooting
+
 | Symptom | Fix |
-| permission denied on start | chmod +x docker/*.sh |
-| $'\r': command not found | Convert .sh to LF (see SETUP.md §1) |
-| bad interpreter ^M after editing | Edit the file bind-mounted by Compose (entrypoint-ollama.sh) |
-| Backend restart loop | docker compose logs backend | tail -100 |
-| Port 7860 busy | Change "7860:7860" → "7861:7860" in docker-compose.yml |
-| "Invalid credentials" | Use Moodle ID (not email), exact full name, case-sensitive password |
+|---|---|
+| `permission denied` on start | `chmod +x docker/*.sh` |
+| `$'\r': command not found` | Convert `.sh` to LF (see `SETUP.md` §1) |
+| `bad interpreter ^M` after editing | Edit the file bind-mounted by Compose (`entrypoint-ollama.sh`) |
+| Backend restart loop | `docker compose logs backend \| tail -100` |
+| Port 7860 busy | Change `"7860:7860"` → `"7861:7860"` in `docker-compose.yml` |
+| "Invalid credentials" | Use Moodle **ID** (not email), exact full name, case-sensitive password |
 | Forgot password | Admin resets after Moodle identity verification |
 
 # 5. Testing Rsults
