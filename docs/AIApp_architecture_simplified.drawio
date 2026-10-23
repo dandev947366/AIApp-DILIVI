@@ -1,0 +1,85 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="9PGLN5_XPcD3n8aUOKBd">
+    <mxGraphModel dx="2222" dy="555" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#dae8fc;strokeColor=#174482;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Student&lt;/b&gt;&lt;/font&gt;&lt;div&gt;Uses Gradio Web UI or Telegram Bot&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="280" x="250" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-30" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#e1d5e7;strokeColor=#BB8FCF;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;User Interface&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;Gradio web interface/ Telegram Bot&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="360" x="210" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-31" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.529;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;labelPerimeter=1;fillColor=#d5e8d4;strokeColor=#96CF76;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;LangGraph Supervisor (Multi-Agent)&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;Routes student requests to specialized AI agents&lt;/div&gt;" vertex="1">
+          <mxGeometry height="240" width="500" x="140" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#fff2cc;strokeColor=light-dark(#c99e1d, #6d5100);" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Assignment Agent&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Moodle iCal)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="160" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#dae8fc;strokeColor=#174482;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Study Planner&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Study Plan &amp;amp; Schedule)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="315" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#f8cecc;strokeColor=#93413D;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Tutor Agent&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Q&amp;amp;A Support)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="310" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#eeeeee;strokeColor=#798089;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;General Chat Agent&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(General Questions)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="470" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#e1d5e7;strokeColor=#BB8FCF;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Skill Analyst&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Skills &amp;amp; Gaps)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="470" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#d5e8d4;strokeColor=#688E50;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Job Search Agent&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Job Opportunities)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="160" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-32" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#e1d5e7;strokeColor=#BB8FCF;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Ollama/ Local LLM&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;Generates responses&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="360" x="200" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-33" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#f8cecc;strokeColor=#93413D;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Pydantic + Tools&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;Structured Output, Validation, Function calling&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="360" x="200" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#dae8fc;strokeColor=light-dark(#174482, #5c79a3);" value="&lt;div&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Response to student&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;In the UI&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="360" x="200" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-28" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#fff2cc;strokeColor=light-dark(#c99e1d, #6d5100);" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Moodle iCal&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Assignment deadlines + caledar)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="160" x="-70" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#dae8fc;strokeColor=light-dark(#174482, #5c79a3);" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Student Data/ SQL&amp;nbsp;&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Profile, skills, calendar, history)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="180" x="690" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-29" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.004;entryY=0.658;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fillColor=#d5e8d4;strokeColor=#688E50;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Jobicy&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;div&gt;(Job data)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="690" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-23" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-3" style="endArrow=classic;startArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="130" as="sourcePoint" />
+            <mxPoint x="450" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_ZmkF6QepiSWfvUnDK4K-27" edge="1" parent="1" source="_ZmkF6QepiSWfvUnDK4K-18" style="endArrow=classic;startArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=0.056;exitY=0.417;exitDx=0;exitDy=0;strokeColor=#3333FF;" target="_ZmkF6QepiSWfvUnDK4K-6" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="350" y="500" as="sourcePoint" />
+            <mxPoint x="400" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
