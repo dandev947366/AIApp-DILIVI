@@ -274,6 +274,12 @@ See Setup instruction:
 - UI reachable at `http://localhost:7860`
 - Telegram bot responds to `/start`, `/login`, `/create_account`
 
+## 5.5 Evaluation
+
+![Evaluation](imgs/evaluation_run.png)
+
+[Evaluation Result](evaluation/evaluation_results.md) 
+
 # 6. Known limitations
 
 - AI workload estimates may be inaccurate; assignment text may be insufficient.
