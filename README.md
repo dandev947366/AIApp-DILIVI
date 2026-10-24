@@ -276,8 +276,6 @@ See Setup instruction:
 
 ## 5.5 Evaluation
 
-![Evaluation](imgs/evaluation_run.png)
-
 [Evaluation Result](evaluation/evaluation_results.md) 
 
 # 6. Known limitations
