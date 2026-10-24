@@ -99,7 +99,7 @@ The solution can be viewed as three connected levels:
 | 6 | Tutor MCP Server, adaptive learning tools | ✅ |
 | 7 | Career assistant + live job-market data | ✅ |
 | 8 | Telegram bot integration | ✅ |
-| 9 | RAG career advisor | 🚧 planned |
+| 9 | Thesis Agent + RAG (ChromaDB) | ✅ |
 
 ### 1.7 Features
 [Features](docs/FEATURES.md)
@@ -117,11 +117,11 @@ Initial architecture:
 
 System Overview:
 
-![System Overview](imgs/1-system-overview.png)
+![System Overview](imgs/1_system_overview.png)
 
 
 LangGraph Topology
-![LangGraph Topology](imgs/3-langgraph-topology.png)
+![LangGraph Topology](imgs/3_langgraph_topology.png)
 
 See Agent graph logic:
 [Agent graph](docs/AGENT_GRAPH.md)
@@ -136,13 +136,12 @@ See Agent graph logic:
 
 ## 2.3 Data flow 
 
-![Data Flow](imgs/2-data-flow.png)
+![Data Flow](imgs/2_data_flow.png)
 
 ## 2.4 Closed memory loop
 After every response, the LLM extracts durable preferences ("I prefer studying in the evening") and merge them into `student_profiles`. The next request's Memory Node sees the updated profile - this is how DAIA learns.
 
 ## 2.5 Project structure
-
 ```text
 DAIA/
 ├── app/
@@ -154,6 +153,8 @@ DAIA/
 │   │   ├── graph.py
 │   │   ├── memory_node.py
 │   │   ├── supervisor.py
+│   │   ├── thesis_agent.py        # RAG Thesis Agent
+│   │   ├── knowledge_manager.py   # Admin Agent for DB updates
 │   │   └── ...                    # specialist nodes
 │   ├── services/                  # Application/service layer
 │   │   ├── agent_service.py       # Main orchestration (chat entry)
@@ -164,11 +165,15 @@ DAIA/
 │   ├── mcp/                       # Model Context Protocol clients
 │   │   ├── jobicy.py              # Jobicy search + scoring
 │   │   └── tutor_mcp.py           # stdio client for 46-tool Tutor MCP
+│   ├── rag/                       # RAG pipeline
+│   │   └── ingest.py              # ChromaDB ingestion script
 │   ├── tools/                     # Deterministic DB queries
 │   │   ├── assignments.py
 │   │   ├── profile.py
 │   │   ├── skills.py
-│   │   └── jobs_db.py
+│   │   ├── jobs_db.py
+│   │   ├── rag_search.py          # ChromaDB search tool
+│   │   └── kb_updater.py          # ChromaDB write tool
 │   ├── memory/                    # Chat history + preference extraction
 │   │   ├── conversation_memory.py
 │   │   ├── extraction.py
@@ -177,10 +182,13 @@ DAIA/
 │   └── schemas/                   # Pydantic schemas for validation
 ├── docs/                          # Architecture, reports, and guides
 ├── data/
-│   └── student_context.db         # SQLite database
+│   ├── student_context.db         # SQLite database
+│   ├── chroma_db/                 # Vector database (auto-generated)
+│   └── rag/                       # Raw knowledge base
+│       └── thesis_rules.txt       # HAMK Thesis & AI guidelines
 ├── docker/                        # Entrypoint + wait-for scripts
 ├── tests/                         # Unit + integration tests
-└── student_context.db             # Local root DB (for quick testing)
+└── evaluation/                    # Automated evaluation pipeline
 ```
 ## 2.6 Tutor MCP Server - 46 tools in 6 categories
 The tutor is an adaptive, mastery-based learning system exposed as an MCP server. The LLM selects tools by name; all pedagogical rules - what counts as mastery, when to reassess, which misconceptions to surface - are enforced deterministically in code. This prevents the LLM from "hallucunating progress" or skipping prerequisites.
@@ -214,6 +222,7 @@ Six tool categories:
 | Orchestration | LangGraph | Explicit state machine over LLM calls |
 | Tool protocol | MCP (Model Context Protocol) | Standard tool calling |
 | DB | SQLAlchemy + SQLite | Zero-config, portable |
+| Vector DB	| ChromaDB	| Local vector store for RAG |
 | Config | `python-dotenv`, Pydantic | Validation + reproducibility |
 | Integrations | Moodle iCal, Jobicy API, Telegram Bot API | Real-world data |
 | Learning models | BKT, FSRS | Mastery + retention estimation |
@@ -226,10 +235,20 @@ by `extract_memory_updates` and the MCP tool schemas. Larger models
 ---
 
 
-## Model
+## Model Selection & Rationale
 
-- **Model used:** Llama3.2:3b (`llama3.2:3b`)
-- **Selection rationale:** Llmama3.2:3b runs on laptop, follows instructions well, and handles structured extraction. Alternatives tested: `qwen2.5:7b`, `llmama3.1:8b`. 
+DAIA uses a **dual-model architecture** running entirely locally via Ollama. This ensures zero data exfiltration and zero API costs, which is critical for handling student PII and transcripts.
+
+### 1. Generative LLM (Chat & Agents)
+- **Model used:** `llama3.2:3b`
+- **Role:** Acts as the brain for the LangGraph agents (Supervisor routing, Study Planner, Thesis synthesis, etc.).
+- **Selection rationale:** `llama3.2:3b` runs efficiently on a standard laptop (8 GB RAM). It follows instructions reliably and handles the structured JSON extraction required by `preferences.py` and the MCP tool schemas. 
+- **Alternatives tested:** `qwen2.5:7b`, `llama3.1:8b` (Tested for larger context windows, but required too much RAM for a lightweight local deployment).
+
+### 2. Embedding Model (RAG Pipeline)
+- **Model used:** `nomic-embed-text`
+- **Role:** Converts the raw `thesis_rules.txt` and user queries into high-dimensional vector embeddings for ChromaDB.
+- **Selection rationale:** `nomic-embed-text` is a lightweight, open-source embedding model that outperforms OpenAI's `text-embedding-ada-002` on short and long-context retrieval tasks. It is incredibly fast (typically < 100ms per chunk) and runs perfectly inside the Ollama container alongside the main LLM.
 
 # 4. Installation and Running
 See Setup instruction:
@@ -259,6 +278,8 @@ See Setup instruction:
 | Curriculum revision preserves progress | ✅ Versioned, stale writer rejected |
 | Assessment frozen before exposure | ✅ Rubric immutable |
 | Two concurrent users → isolated context | ✅ No cross-talk |
+| RAG Thesis Retrieval | ✅ Correctly retrieves HAMK rules from ChromaDB
+| RAG Admin Update | ✅ ADMIN: prefix securely updates rules
 
 ## 5.3 Performance
 
@@ -268,17 +289,21 @@ See Setup instruction:
 | Repeat question (cache hit) | < 100 ms |
 | Memory Node from cache | < 50 ms |
 | Tutor routing (`get_next_activity`) | < 100 ms |
+| RAG retrieval (ChromaDB)	| < 500 ms
 
 ## 5.4 Manual verification
 
 - `docker compose ps` → all containers `healthy`
 - Backend log: `Ollama is ready with model 'llama3.2:3b'.`
+- Backend log: [RAG] Ingested X chunks into ChromaDB.
 - UI reachable at `http://localhost:7860`
 - Telegram bot responds to `/start`, `/login`, `/create_account`
 
 ## 5.5 Evaluation
 
 [Evaluation Result](evaluation/evaluation_results.md) 
+
+[Evaluation Result For RAG](evaluation/evaluation_results_rag.md) 
 
 # 6. Known limitations
 
@@ -293,20 +318,13 @@ See Setup instruction:
 - Telegram bot requires user-provided token
 - Session cache is per-process (restart clears it; sessions survive in SQLite)
 - The tutor MCP's mastery model (BKT/FSRS) is calibrated on synthetic data; production calibration is future work
+- RAG Retrieval limits: While the strict prompt prevents most hallucinations, local LLMs (3B parameters) can occasionally ignore the retrieved context if the temperature is too high. We mitigated this by setting temperature=0.1 and strictly forcing the output format.
 
 # 7. Future improvements: Career Path
 
-DAIA's architecture is designed to grow beyond academic planning. The same components - local LLM, versioned curriculum, MCP tools, privay-first deployment - map naturally to career-oriented features planned for later phases.
-
-Possible future extensions:
-
-- Student feedback after completing an assignment
-- Personalized workload estimates
-- Natural-language commands such as "What's due this week?"
-- Snoozing or rescheduling reminders
-- Expand the persistent student profile with courses, skills, interests, projects, thesis preferences, and career goals.
-- Improve personalization by comparing assignments and acquired skills over time.
-- Integrate current job-market data or job-search APIs to support internship and job exploration.
+- Student feedback after completing an assignment.
+- Natural-language commands for snoozing or rescheduling reminders.
+- Expand the persistent student profile with projects and thesis preferences.
 - Add stronger privacy and security mechanisms for storing and processing student information.
 
 # 8. Documentation map

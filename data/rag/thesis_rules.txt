@@ -56,7 +56,7 @@ Acceptable applications of AI:
 
 Unacceptable applications of AI:
 - Do not share any sensitive or confidential data.
-- AI must NOT be used to generate the substantive content of the thesis.
+- AI tools (such as ChatGPT, Copilot, or Claude) must NOT be used to generate the substantive content of the thesis.
 - Do not trust results blindly; verify outputs.
 - Use of AI during the maturity exam is strictly forbidden.
 - Submitting AI-generated work as your own is plagiarism/fraud.

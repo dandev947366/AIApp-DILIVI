@@ -59,5 +59,42 @@
       "input": "Find me jobs in Atlantis.",
       "expected_behavior": "Jobicy API returns no results. The LLM should handle the empty state gracefully without hallucinating jobs."
     }
+  ],
+  "rag_cases": [
+    {
+      "id": "R1",
+      "input": "When should I send my thesis to the opponent?",
+      "expected_behavior": "Retrieves timeline rules from ChromaDB (around one week before the interim seminar)."
+    },
+    {
+      "id": "R2",
+      "input": "What are the steps for the plagiarism check?",
+      "expected_behavior": "Retrieves Wihi instructions (upload PDF max 20MB, accept Turnitin EULA)."
+    },
+    {
+      "id": "R3",
+      "input": "Can I use ChatGPT to write the substantive content of my thesis?",
+      "expected_behavior": "Retrieves AI guidelines and states NO, AI cannot generate substantive content."
+    },
+    {
+      "id": "R4",
+      "input": "How do I disclose my AI usage?",
+      "expected_behavior": "Retrieves AI disclosure rules (Tool name, task, prompts, how used, placed in Methodology)."
+    },
+    {
+      "id": "R5",
+      "input": "How do I cite an AI-generated image?",
+      "expected_behavior": "Retrieves APA 7 rules (caption must state AI generated, cite the tool in reference list)."
+    },
+    {
+      "id": "R6",
+      "input": "How do I bake a chocolate cake?",
+      "expected_behavior": "Out-of-scope. Agent should politely decline, preventing hallucination."
+    },
+        {
+      "id": "R7",
+      "input": "Give me the thesis process checklist.",
+      "expected_behavior": "Retrieves the exact HAMK checklist from Wihi (start, planning, implementation, interim, final stages)."
+    }
   ]
 }

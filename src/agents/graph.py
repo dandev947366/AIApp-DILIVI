@@ -2,7 +2,6 @@
 """LangGraph: Builds the supervisor graph."""
 
 from langgraph.graph import StateGraph, END, START
-
 from src.agents.state import AgentState
 from src.agents.memory_node import memory_node
 from src.agents.supervisor import supervisor_node
@@ -45,21 +44,20 @@ def route_after_study_planner(state: AgentState) -> str:
 
 def final_response_node(state: AgentState) -> dict:
     parts = []
-
     if state.get("general_chat_result"):
         parts.append(state["general_chat_result"])
-
     if state.get("thesis_result"):
         parts.append(f"🎓 **Thesis Advisor:**\n{state['thesis_result']}")
-
     if state.get("study_plan_result"):
         parts.append(f"📅 **Study Plan:**\n{state['study_plan_result']}")
-
     if state.get("skill_analysis_result"):
         parts.append(f"🎯 **Skill Analysis:**\n{state['skill_analysis_result']}")
-
     if state.get("tutor_result"):
         parts.append(f"🎓 **Tutor:**\n{state['tutor_result']}")
+
+    # ➕ FIX: Added job_search_result to prevent "No response generated" overwrite (Fixes S3, F4)
+    if state.get("job_search_result"):
+        parts.append(f"💼 **Job Search:**\n{state['job_search_result']}")
 
     return {
         "final_response": (
@@ -84,7 +82,6 @@ def build_agent_graph():
     # Register the new RAG nodes
     graph.add_node("thesis_agent", thesis_agent_node)
     graph.add_node("knowledge_manager", knowledge_manager_node)
-
     graph.add_node("final_response", final_response_node)
 
     # Edges

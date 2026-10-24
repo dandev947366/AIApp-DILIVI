@@ -91,13 +91,41 @@ _GREETING_ONLY = {
 
 def _should_extract(message: str) -> bool:
     msg = (message or "").strip().lower()
-    if not msg:
+    if not msg or msg in _GREETING_ONLY:
         return False
-    # Only extract if the user talks about themselves
-    triggers = ["i ", "my ", "me ", "prefer", "goal", "study", "degree", "hour"]
-    if not any(t in msg for t in triggers):
-        return False
-    return msg not in _GREETING_ONLY
+
+    # 1. Check if it's a direct correction or explicit update
+    if any(
+        correction in msg
+        for correction in [
+            "make that",
+            "change that",
+            "actually",
+            "update my",
+            "set my",
+        ]
+    ):
+        return True
+
+    # 2. Otherwise, it must have BOTH a profile keyword and a self-reference
+    field_triggers = [
+        "degree",
+        "major",
+        "study",
+        "hour",
+        "career",
+        "goal",
+        "semester",
+        "interest",
+        "prefer",
+        "favorite",
+    ]
+    self_refs = ["i ", "i'm", "i am", "my ", "me "]
+
+    has_field = any(kw in msg for kw in field_triggers)
+    has_self = any(pronoun in msg for pronoun in self_refs)
+
+    return has_field and has_self
 
 
 _FORGET_PATTERNS = {

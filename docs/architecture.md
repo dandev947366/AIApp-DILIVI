@@ -1,3 +1,4 @@
+
 # DAIA — System Architecture
 
 > **Audience:** Developers, architects, and reviewers.
@@ -9,68 +10,69 @@
 ## 1. System Diagram
 
 **Initial architecture:**
-
 ![AI Study Deadline Assistant Architecture](DAIA_architecture.svg)
 
 > **Core Architectural Rule:** The user interface does not communicate directly with the model or Ollama. Model interaction passes through the application/service layer, which enforces authentication, context loading, memory updates, and caching.
 
-**System Overview:**
-
-![System Overview](../imgs/1-system-overview.png)
-
 **LangGraph Topology:**
-
-![LangGraph Topology](../imgs/3-langgraph-topology.png)
-
-*(See [Agent Graph](AGENT_GRAPH.md) for detailed node logic and routing rules.)*
+*(See [Agent Graph](AGENT_GRAPH.md) for detailed node logic and routing rules, including the new Thesis Agent).*
 
 ---
 
 ## 2. Authentication & Session Cache
 
-**Register / Login / Logout**
-- Passwords are **bcrypt-hashed**.
-- Sessions are delivered as **HTTP-only cookies**.
-- Sessions are **stored in SQLite** (the `students.session_token_hash` / `students.session_token_expires` columns).
-
 **Session store (SQLite)**
-- **Authoritative** source of truth.
-- **Survives restarts.**
-- **TTL:** 8 hours.
+- **Authoritative** source of truth. Survives restarts. TTL: 8 hours.
 
 **Session cache (in-memory, `TTLCache`)**
-
-Performance-only layer — never authoritative:
-
-| Cached item | TTL | What it skips |
-| :--- | :--- | :--- |
-| `student_context` | **60 s** | The Memory Node's ~5 SQL queries |
-| Chat answers | **300 s** | The LLM call on repeat questions |
-
-**Invalidation rules**
-- Cleared on **logout**.
-- Cleared on **profile update** (any `update_student_profile` write).
+- `student_context`: 60s TTL (skips Memory Node).
+- Chat answers: 300s TTL (skips LLM on repeat questions).
+- **Invalidation:** Cleared on logout and on profile update.
 
 ---
 
-## 3. Data Flow (One Request)
+## 3. Data Flow & Persistence
 
-![Data Flow](../imgs/2-data-flow.png)
+DAIA uses a **dual-database architecture**:
+1. **SQLite:** Relational data (Students, Courses, Deadlines, Profiles).
+2. **ChromaDB:** Vector data (University Thesis Rules & AI Guidelines).
 
-**Step-by-step:**
-
-1. **Browser → `require_session()`** — validate the HTTP-only cookie against the SQLite session store. Reject if expired or missing.
-2. **`require_session()` → `agent_service`** — hand off the authenticated `student_db_id` and the user message.
-3. **Context cache check** — if `student_context` is fresh (< 60 s), skip the Memory Node entirely (avoids ~5 SQL queries).
-4. **Answer cache check** — if the exact question was answered in the last 300 s for this student, return the cached answer without invoking the LLM.
-5. **LangGraph** — run the supervisor graph (memory → supervisor → specialist → final response).
-6. **LLM** — invoked by the routed specialist node.
-7. **Save messages** — persist both the user turn and the assistant reply to `conversation_messages`.
-8. **Cache** — store the new `student_context` (60 s) and the answer (300 s).
-9. **Return** — stream the final response back to the browser.
+**Step-by-step (One Request):**
+1. **Browser → `require_session()`** — validate session.
+2. **`agent_service`** — hands off to LangGraph.
+3. **Memory Node** — loads SQLite data (Profile, Moodle) into `state`.
+4. **Supervisor** — routes to the appropriate agent.
+5. **Agent Execution:**
+   *   *Normal Agents* (Planner, Tutor): Use the LLM and context.
+   *   *Thesis Agent (RAG)*: Queries **ChromaDB** via `nomic-embed-text` to retrieve factual university rules.
+   *   *Knowledge Manager (Admin)*: Writes new rules to ChromaDB.
+6. **Save messages** — persist to `conversation_messages` in SQLite.
+7. **Return** — stream to UI.
 
 ---
 
-## 4. Closed Memory Loop
+## 4. The RAG Pipeline (Thesis Agent)
 
-After every response, the LLM extracts durable preferences (e.g., *"I prefer studying in the evening"*) and merges them into `student_profiles`. The next request's Memory Node sees the updated profile — **this is how DAIA learns.**
+DAIA features a localized **Retrieval-Augmented Generation (RAG)** system to prevent the LLM from hallucinating university rules.
+
+### 4.1 Ingestion (Startup)
+1. On first boot, `src/rag/ingest.py` reads `data/rag/thesis_rules.txt`.
+2. The text is chunked (size 300) and embedded using `nomic-embed-text` (via Ollama).
+3. Vectors are persisted to `/app/data/chroma_db`.
+
+### 4.2 Retrieval (Runtime)
+1. Student asks: *"What are the rules for my thesis?"*
+2. `Thesis Agent` calls `search_thesis_guide` tool.
+3. The tool performs a semantic similarity search in ChromaDB (`k=2`).
+4. The retrieved text is injected into a strict prompt: *"Answer using ONLY this Context."*
+
+### 4.3 Agentic Updates (Admin)
+1. Admin types: *"ADMIN: Update deadline to Dec 15th."*
+2. Supervisor routes to `Knowledge Manager`.
+3. The agent calls `add_thesis_rule`, which appends to the `.txt` file and embeds the new rule directly into ChromaDB.
+
+---
+
+## 5. Closed Memory Loop
+
+After every response, the LLM extracts durable preferences (e.g., *"I prefer studying in the evening"*) and merges them into `student_profiles` in SQLite. The next request's Memory Node sees the updated profile — **this is how DAIA learns.**

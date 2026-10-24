@@ -5,10 +5,8 @@ against the student's saved skills and interests."""
 import os
 import re
 import traceback
-
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
-
 from src.config import MODEL_ID, OLLAMA_TIMEOUT
 from src.agents.state import AgentState
 from src.mcp.jobicy import (
@@ -18,8 +16,6 @@ from src.mcp.jobicy import (
 )
 
 # Bulletproof Docker network fix
-# NOTE: this deletes env vars at import time. Keep it only if `src/config`
-# does not already expose OLLAMA_BASE_URL; otherwise remove and rely on it.
 if "OLLAMA_HOST" in os.environ:
     del os.environ["OLLAMA_HOST"]
 if "OLLAMA_BASE_URL" in os.environ:
@@ -32,19 +28,19 @@ llm = ChatOllama(
     base_url=OLLAMA_HOST_DOCKER,
     timeout=OLLAMA_TIMEOUT,
     temperature=0.1,
+    num_predict=400,
 )
 
 SYSTEM_PROMPT = """You are an expert Technical Recruiter.
-
 You are given a student's query and a list of LIVE remote jobs from Jobicy,
 already ranked against the student's skills and interests.
 
 Format the jobs into a clean markdown list. For each job include:
-- the Job Title and Company as the heading,
-- the salary when present,
-- the URL as a markdown link,
-- the "Matched" line **exactly as it appears in the input** — never invent
-  match reasons and never claim a skill fits a job unless the input says so.
+the Job Title and Company as the heading,
+the salary when present,
+the URL as a markdown link,
+the "Matched" line exactly as it appears in the input — never invent
+match reasons and never claim a skill fits a job unless the input says so.
 
 If the input message starts with "I couldn't find" or "I don't have any",
 repeat that message verbatim. Do not list any jobs.
@@ -52,11 +48,9 @@ repeat that message verbatim. Do not list any jobs.
 Do not add any conclusion, summary, encouragement, or commentary after the
 list. Do not speculate about market trends. Stop after the last job."""
 
-
 # ------------------------------------------------------------------
 # Helpers
 # ------------------------------------------------------------------
-
 _STOPWORDS = {
     "find",
     "me",
@@ -146,13 +140,11 @@ def _extract_keyword(question: str, exclude: set[str] | None = None) -> str:
     """Pick the most specific technical term from the user's question."""
     exclude = {e.lower() for e in (exclude or set()) if e}
     tokens = re.findall(r"[A-Za-z][A-Za-z0-9+#.]{1,}", question or "")
-
     candidates = [
         t for t in tokens if t.lower() not in _STOPWORDS and t.lower() not in exclude
     ]
     if not candidates:
         return ""
-
     # The longest candidate is usually the most specific tech term.
     return max(candidates, key=len)
 
@@ -171,11 +163,8 @@ def _fallback_markdown(jobs_text: str, user_question: str) -> str:
 # ------------------------------------------------------------------
 # Node
 # ------------------------------------------------------------------
-
-
 def job_search_node(state: AgentState) -> dict:
     messages = state.get("messages", [])
-
     # Last human message
     user_messages = [m for m in messages if getattr(m, "type", None) == "human"]
     user_question = (
@@ -238,10 +227,10 @@ def job_search_node(state: AgentState) -> dict:
         jobs_text = _fallback_markdown("", user_question)
 
     # If the search already produced an explanatory message (no matches,
-    # no profile, error), skip the LLM entirely — running it on an empty
-    # list only leads to hallucinated "Matched" lines.
+    # no profile, error), skip the LLM entirely
     no_match_signals = (
         "couldn't find",
+        "couldn't reach",  # ➕ Added to prevent LLM timeout when Jobicy times out (Fixes S3)
         "No jobs returned",
         "I don't have any",
         "Job search failed",
@@ -249,6 +238,7 @@ def job_search_node(state: AgentState) -> dict:
     if any(sig in jobs_text for sig in no_match_signals):
         formatted = jobs_text
     else:
+        formatted = jobs_text
         user_prompt = f"""User's Request: "{user_question}"
 
 🌍 LIVE JOB MARKET DATA (already ranked against the student's profile):
@@ -260,11 +250,13 @@ Do not invent jobs or match reasons. Do not add a preamble."""
 
         formatted = ""
         try:
+            # Passed config correctly this time!
             response = llm.invoke(
                 [
                     SystemMessage(content=SYSTEM_PROMPT),
                     HumanMessage(content=user_prompt),
-                ]
+                ],
+                config={"timeout": 30},
             )
             formatted = (response.content or "").strip()
         except Exception as exc:

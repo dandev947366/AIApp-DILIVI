@@ -52,17 +52,12 @@ Get personalized help with your coursework. The AI assistant reads your Moodle a
 ### 📚 AI Thesis Advisor & Knowledge Base (RAG)
 DAIA features a dedicated Thesis Agent powered by a localized Retrieval-Augmented Generation (RAG) pipeline. It helps you brainstorm thesis topics based on your unique skills and interests, while also acting as an expert consultant for university rules.
 
-![Thesis RAG 1](../imgs/thesis-rag-1.png)
+![Thesis RAG 1](../imgs/thesis-rag-fixed.png)
 *Querying the local ChromaDB knowledge base for exact HAMK thesis rules and Wihi instructions.*
 
-![Thesis RAG 2](../imgs/thesis-rag-2.png)
-*Retrieving factual AI-use guidelines and GDPR regulations to prevent hallucination.*
 
-![Thesis Idea 1](../imgs/thesis-idea-1.png)
+![Thesis Idea 1](../imgs/thesis-idea-fixed.png)
 *Generating personalized thesis topics based on your student profile.*
-
-![Thesis Idea 2](../imgs/thesis-idea-2.png)
-*Refining thesis research questions and methodologies.*
 
 ### 💼 AI Career Assistant & Job Market Data
 Bridge the gap between your studies and your career. DAIA searches for relevant jobs based on your location and interests, and provides live job market data.
