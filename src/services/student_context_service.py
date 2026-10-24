@@ -1,11 +1,11 @@
-from sqlalhemy.orm import Session
+from typing import Any
 from src.models.student_context import StudentContextDB
 from src.schemas.student_context import StudentContext
 
 # CRUD operations for the StudentContextDB model
 
 def create_student_context(
-        db: Session, 
+    db: Any, 
         student_id: str,
         student_context: StudentContext) -> StudentContextDB:
     """
@@ -26,7 +26,7 @@ def create_student_context(
     if existing is not None :
         raise ValueError(f"Student context for student_id '{student_id}' already exists.")
 
-    context_data = context.model_dump(model="json")  # Convert Pydantic model to dictionary
+    context_data = student_context.model_dump(mode="json")  # Convert Pydantic model to dictionary
     context_data["student_info"]["student_id"] = student_id  # Ensure student_id is included in the context data
     db_student_context = StudentContextDB(
         student_id=student_id,
@@ -37,7 +37,7 @@ def create_student_context(
     db.refresh(db_student_context)
     return db_student_context
 
-def get_student_context(db: Session, student_id: str) -> StudentContextDB | None:
+def get_student_context(db: Any, student_id: str) -> StudentContextDB | None:
     """
     Retrieve a student context entry from the database by student ID.
 
@@ -51,7 +51,7 @@ def get_student_context(db: Session, student_id: str) -> StudentContextDB | None
     return db.get(StudentContextDB, student_id)
 
 def update_student_context(
-        db: Session, 
+    db: Any, 
         student_id: str, 
         updated_context: StudentContext) -> StudentContextDB:
     """
@@ -76,7 +76,7 @@ def update_student_context(
     db.refresh(db_student_context)
     return db_student_context
 
-def delete_student_context(db: Session, student_id: str) -> None:
+def delete_student_context(db: Any, student_id: str) -> None:
     """
     Delete a student context entry from the database by student ID.
 

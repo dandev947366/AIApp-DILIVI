@@ -22,7 +22,7 @@ University students who:
 
 ### 1.2 Problem statement
 
-Students can be confused with a maxtrix of deadline relating to individual assignments, group projects, quiz, exams,..They can see when assignments or submissions are due, but it can be difficult to decide when they should start working on them.
+Students can be confused with a matrix of deadline relating to individual assignments, group projects, quiz, exams,..They can see when assignments or submissions are due, but it can be difficult to decide when they should start working on them.
 
 Different assignments require different amounts of time and effort. Starting too late can lead to rushed work and missed deadlines.
 
@@ -132,7 +132,7 @@ See Agent graph logic:
 - **Session cache** (in-memory, `TTLCache1) - performmance only:
     + student_context cached 60s (skips Memory Node's 5 SQL queries),
     + answers cahed 300 s (skips the LLM on repeat questions),
-    + invalidated on logoit and on profile update.
+    + invalidated on logit and on profile update.
 
 ## 2.3 Data flow 
 
@@ -191,9 +191,9 @@ DAIA/
 └── evaluation/                    # Automated evaluation pipeline
 ```
 ## 2.6 Tutor MCP Server - 46 tools in 6 categories
-The tutor is an adtaptive, mastery-based learning system exposed as an MCP server. The LLM selects tools by name; all pedagogical rules - what counts as mastery, when to reassess, which misconceptions to surface - are enforced deterministically in code. This prevents the LLM from "hallucunating progress" or skipping prerequisites.
+The tutor is an adaptive, mastery-based learning system exposed as an MCP server. The LLM selects tools by name; all pedagogical rules - what counts as mastery, when to reassess, which misconceptions to surface - are enforced deterministically in code. This prevents the LLM from "hallucunating progress" or skipping prerequisites.
 Six tool categories:
-1. Curriculum: 12 tools : versioned domains, concepts, prerequisites. Cirriculum changes never destroy learner progress.
+1. Curriculum: 12 tools : versioned domains, concepts, prerequisites. Curriculum changes never destroy learner progress.
 2. Learning cycle: 6 tools: routes the next optimal activity, exposes the session plan for learner negotiation, surfaces alerts
 3. Assessment: 13 tools: Freezes tasks and rubics before exposure; records evidence from recall, transfer, and self-calibration.
 4. Learner model: 7 tools: BKT/FSRS mastery estimates, affects, preferences, if-then practice commitments.
@@ -202,7 +202,7 @@ Six tool categories:
 **Three design principles that matter most:** 
 * Versioned curriculum: Every curriculum edit is an immutable revision checked against 'expected_version'; stale writers are rejected. Learners never lose progress when the domain is reorganised.
 * Frozen assessments: 'prepare_assessment_attempt' locks the tak and rubric before the learner sees it. Grading cannot drift after the fact.
-* Replayable decision: 'get_decision_replay_summary' reconstructs every pedagogical choice from stored snapshots - the explainability layer that distinguishes DAIA from blacj-box chatbot and aligns with EU AI Act transparency expectations.
+* Replayable decision: 'get_decision_replay_summary' reconstructs every pedagogical choice from stored snapshots - the explainability layer that distinguishes DAIA from black-box chatbot and aligns with EU AI Act transparency expectations.
 
 | Full tools reference (schemas, BKT/FSRS calibration): [Tutor tools](docs/Tutor-MCP.md)
 
@@ -332,12 +332,11 @@ See Setup instruction:
 | Document | Audience | Contents |
 |---|---|---|
 | [**README.md**](README.md) (this file) | Everyone | Overview, architecture, technologies, install & run, testing, limitations, future development |
-| [`SETUP.md`](SETUP.md) | New users, operators | Step-by-step install, OS-specific notes, troubleshooting |
-| [`docs/TUTOR_MCP.md`](docs/TUTOR_MCP.md) | AI engineers | Full 46-tool reference, tool schemas, BKT/FSRS calibration, extension points |
-| [`docs/AGENT_GRAPH.md`](docs/AGENT_GRAPH.md) | AI engineers, Developers | LangGraph topology, routing logic, node reference, execution flows, extension checklist |
-| [`docs/DATABASE.md`](docs/DATABASE.md) | Developers, Operators | Table schemas, indexes, ER diagram, migrations, backup & restore, known limitations |
-| [`docs/FEATURES.md`](docs/FEATURES.md) | Product, Users | Comprehensive list of product features and capabilities |
-| [`docs/architecture.md`](docs/architecture.md) | Developers, Architects | System diagrams and architectural design decisions (accompanies `DAIA_architecture.svg`) |
-| [`docs/roadmap-progress.md`](docs/roadmap-progress.md) | Stakeholders | Current progress against the roadmap (`road-map.png`) |
-| [`evaluation/evaluation_results`](evaluation/evaluation_results.md) | QA, Researchers | Assignment analysis accuracy test cases, evaluation methodology, and results |
-| [`evaluation/evaluation_results_rag`](evaluation/evaluation_results_rag.md) | QA, Researchers | Assignment analysis accuracy test cases for RAG feature |
+| [`SETUP.md`](SETUP.md) | New users, Operators | Step-by-step install, OS-specific notes, troubleshooting |
+| [`docs/TUTOR_MCP.md`](docs/TUTOR_MCP.md) | Team members, Lecturer | Full 46-tool reference, tool schemas, BKT/FSRS calibration, extension points |
+| [`docs/AGENT_GRAPH.md`](docs/AGENT_GRAPH.md) | Team member, Lecturer | LangGraph topology, routing logic, node reference, execution flows, extension checklist |
+| [`docs/DATABASE.md`](docs/DATABASE.md) | Team member, Lecturer, Operators | Table schemas, indexes, ER diagram, migrations, backup & restore, known limitations |
+| [`docs/FEATURES.md`](docs/FEATURES.md) | Team member, Users | Comprehensive list of product features and capabilities |
+| [`docs/architecture.md`](docs/architecture.md) | Team members, Developers, Architects | System diagrams and architectural design decisions (accompanies `DAIA_architecture.svg`) |
+| [`docs/roadmap-progress.md`](docs/roadmap-progress.md) | Team members | Current progress against the roadmap (`road-map.png`) |
+| [`evaluation/evaluation_results`](evaluation/evaluation_results.md) | QA, Lecturer | Assignment analysis accuracy test cases, evaluation methodology, and results |
