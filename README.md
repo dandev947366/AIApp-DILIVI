@@ -236,7 +236,7 @@ See Setup instruction:
 
 [SET UP](SETUP.md)
 
-# 5. Testing Rsults
+# 5. Testing Results
 ## 5.1 Automated tests
 | Test file | Coverage |
 |---|---|
