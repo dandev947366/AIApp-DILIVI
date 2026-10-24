@@ -110,6 +110,17 @@ Initial architecture:
 
 > **Core Architectural Rule:** The user interface does not communicate directly with the model or Ollama. Model interaction passes through the application/service layer, which enforces authentication, context loading, memory updates, and caching.
 
+System Overview:
+
+![System Overview](imgs/1-system-overview.png)
+
+
+LangGraph Topology
+![LangGraph Topology](imgs/3-langgraph-topology.png)
+
+See Agent graph logic:
+[Agent graph](docs/AGENT_GRAPH.md)
+
 ## 2.2 Authentication & session cache
 - **Register / Login / Logout:** - bcrypt-hashes passwords, HTTP-only cookies, sessions stired in SQLite.
 - **Session store** (SQLite) - authoritative, survives restarts, TTL 8 h.
@@ -118,39 +129,54 @@ Initial architecture:
     + answers cahed 300 s (skips the LLM on repeat questions),
     + invalidated on logoit and on profile update.
 
-## 2.3 Data flow (one request)
-Browser → require_session() → agent_service
-→ context cache hit? → skip Memory Node
-→ answer cache hit? → return cached answer
-→ LangGraph → LLM → save messages → cache → return
+## 2.3 Data flow 
+
+![Data Flow](imgs/2-data-flow.png)
 
 ## 2.4 Closed memory loop
 After every response, the LLM extracts durable preferences ("I prefer studying in the evening") and merge them into `student_profiles`. The next request's Memory Node sees the updated profile - this is how DAIA learns.
 
 ## 2.5 Project structure
-app/ui.py Gradio UI + login/logout screens
-src/services/auth_service.py Register / login / logout
-src/services/session_store.py Authoritative sessions (SQLite)
-src/services/session_cache.py TTL caches (context + answer)
-src/services/agent_service.py Main orchestration
-src/services/telegram_bot.py Telegram integration
-src/services/career_matcher.py Jobicy search + scoring
-src/services/moodle_sync_service.py iCal fetch / parse / upsert
-src/agents/ LangGraph nodes + graph
-src/mcp/tutor/ 46-tool Tutor MCP server
-├── curriculum.py Domain & revision management
-├── cycle.py Learning cycle & routing
-├── assessment.py Frozen assessments & evidence
-├── learner_model.py BKT / FSRS + affect
-├── analytics.py Snapshots & replay
-└── availability.py Scheduling & notifications
-src/tools/ Deterministic DB queries
-src/memory/ Chat history + preference extraction
-src/models/ ORM models
-data/student_context.db SQLite
-docker/ entrypoint + wait-for scripts
-tests/ Unit + integration tests
 
+```text
+DAIA/
+├── app/
+│   ├── ui.py                      # Gradio UI + login/logout screens
+│   ├── bot.py                     # Telegram integration
+│   └── main.py                    # Application entry point
+├── src/
+│   ├── agents/                    # LangGraph nodes + topology
+│   │   ├── graph.py
+│   │   ├── memory_node.py
+│   │   ├── supervisor.py
+│   │   └── ...                    # specialist nodes
+│   ├── services/                  # Application/service layer
+│   │   ├── agent_service.py       # Main orchestration (chat entry)
+│   │   ├── auth_tokens.py         # Session token validation (SQLite)
+│   │   ├── student_auth.py        # Register / login / logout
+│   │   ├── moodle_sync_service.py # iCal fetch / parse / upsert
+│   │   └── transcript_service.py  # PDF extraction & validation
+│   ├── mcp/                       # Model Context Protocol clients
+│   │   ├── jobicy.py              # Jobicy search + scoring
+│   │   └── tutor_mcp.py           # stdio client for 46-tool Tutor MCP
+│   ├── tools/                     # Deterministic DB queries
+│   │   ├── assignments.py
+│   │   ├── profile.py
+│   │   ├── skills.py
+│   │   └── jobs_db.py
+│   ├── memory/                    # Chat history + preference extraction
+│   │   ├── conversation_memory.py
+│   │   ├── extraction.py
+│   │   └── preferences.py
+│   ├── models/                    # SQLAlchemy ORM models
+│   └── schemas/                   # Pydantic schemas for validation
+├── docs/                          # Architecture, reports, and guides
+├── data/
+│   └── student_context.db         # SQLite database
+├── docker/                        # Entrypoint + wait-for scripts
+├── tests/                         # Unit + integration tests
+└── student_context.db             # Local root DB (for quick testing)
+```
 ## 2.6 Tutor MCP Server - 46 tools in 6 categories
 The tutor is an adtaptive, mastery-based learning system exposed as an MCP server. The LLM selects tools by name; all pedagogical rules - what counts as mastery, when to reassess, which misconceptions to surface - are enforced deterministically in code. This prevents the LLM from "hallucunating progress" or skipping prerequisites.
 Six tool categories:
@@ -165,7 +191,7 @@ Six tool categories:
 * Frozen assessments: 'prepare_assessment_attempt' locks the tak and rubric before the learner sees it. Grading cannot drift after the fact.
 * Replayable decision: 'get_decision_replay_summary' reconstructs every pedagogical choice from stored snapshots - the explainability layer that distinguishes DAIA from blacj-box chatbot and aligns with EU AI Act transparency expectations.
 
-| Full tools reference (schemas, BKT/FSRS calibration): docs/TUTOR_MCP.md
+| Full tools reference (schemas, BKT/FSRS calibration): [Tutor tools](docs/Tutor-MCP.md)
 
 
 # 3. Technologies
@@ -201,51 +227,9 @@ by `extract_memory_updates` and the MCP tool schemas. Larger models
 - **Selection rationale:** Llmama3.2:3b runs on laptop, follows instructions well, and handles structured extraction. Alternatives tested: `qwen2.5:7b`, `llmama3.1:8b`. 
 
 # 4. Installation and Running
-## 4.1 Prerequisites
-- Docker Desktop installed and run
-- Verify:
-    ````bash
-    docker --version
-    docker compose version
+See Setup instruction:
 
-## 4.2 One time set up
-
-# 1. Make entrypoints executable (macOS / Linux / WSL / Git Bash)
-chmod +x docker/entrypoint-ollama.sh docker/wait-for-ollama.sh
-
-# 2. Configure the model
-#    Edit .env → MODEL_ID=llama3.2:3b
-
-# 3. Start
-docker compose up -d
-
-# 4. Wait for the model download (first run only)
-docker compose logs -f ollama     # wait for "success"
-
-## 4.3 Run
-Open http://localhost:7860
-1. Create account: full name, Moodle ID, iCal URL, password.
-2. Log in: Moodle ID + full name + password.
-3. Chat: e.g. "What should I prioritize this week?"
-4. Optional: upload a transcript PDF, or connect the Telegram bot.
-
-## 4.4 Everyday commands
-
-docker compose up -d                     # start
-docker compose down                      # stop (keep data)
-docker compose down -v                   # reset (⚠️ wipes data)
-docker compose up -d --force-recreate backend   # rebuild after code change
-docker compose ps                        # status
-
-## 4.5 Troubleshooting
-| Symptom | Fix |
-| permission denied on start | chmod +x docker/*.sh |
-| $'\r': command not found | Convert .sh to LF (see SETUP.md §1) |
-| bad interpreter ^M after editing | Edit the file bind-mounted by Compose (entrypoint-ollama.sh) |
-| Backend restart loop | docker compose logs backend | tail -100 |
-| Port 7860 busy | Change "7860:7860" → "7861:7860" in docker-compose.yml |
-| "Invalid credentials" | Use Moodle ID (not email), exact full name, case-sensitive password |
-| Forgot password | Admin resets after Moodle identity verification |
+[SET UP](SETUP.md)
 
 # 5. Testing Rsults
 ## 5.1 Automated tests
@@ -322,8 +306,4 @@ Possible future extensions:
 |---|---|---|
 | **README.md** (this file) | Everyone | Overview, architecture, technologies, install & run, testing, limitations, future development |
 | `SETUP.md` | New users, operators | Step-by-step install, OS-specific notes, troubleshooting |
-| `Phase1-4-architecture.md` | Maintainers | File-by-file logic, data flow, LangGraph state machine, DB schema |
 | `docs/TUTOR_MCP.md` | AI engineers | Full 46-tool reference, tool schemas, BKT/FSRS calibration |
-| `docs/PROJECT_REPORT.md` | Reviewer | Motivation, objectives, results, v2.0 contributions |
-| `docs/USER_GUIDE.md` | Students | Account creation, login, chat usage, troubleshooting |
-| `docs/TECHNICAL.md` | Developers | Auth layer, session cache, API, schema, extension points |
