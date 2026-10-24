@@ -21,7 +21,7 @@ import time
 import traceback
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
-
+from src.rag.ingest import init_rag_db
 import gradio as gr
 import httpx
 import pymupdf
@@ -61,7 +61,7 @@ OLLAMA_MAX_RETRIES = max(0, int(os.getenv("OLLAMA_MAX_RETRIES", "2")))
 OLLAMA_RETRY_BASE_SECONDS = 2
 
 init_db()
-
+init_rag_db()
 
 # ============================================================
 # STRUCTURED TRANSCRIPT SCHEMAS

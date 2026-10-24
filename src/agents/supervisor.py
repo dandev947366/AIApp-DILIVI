@@ -21,6 +21,8 @@ class RoutingDecision(BaseModel):
             "general_chat",
             "tutor_agent",
             "assignment_sync",
+            "thesis",
+            "knowledge_management",
         ]
     ] = Field(default_factory=list)
 
@@ -42,6 +44,8 @@ Available Agents:
    syncing the student's Moodle assignments and homework.
 6. "general_chat": Handles general knowledge, course information,
    transcripts, greetings, profile updates, or anything else.
+7. "thesis": Handles thesis topic generation, brainstorming, and university thesis rules/guidelines.
+8. "knowledge_management": Handles updates to the university rules.
 
 Rules:
 - Greetings ("hi", "hello", "hey", "good morning", "thanks"),
@@ -60,6 +64,8 @@ Rules:
 - Choose "tutor_agent" if the user asks for help learning, studying, 
   or practicing a specific topic, OR if they ask for help understanding 
   or completing a specific assignment.
+- Choose "thesis" if the user asks about thesis topics, rules, deadlines, or guidelines.
+- Choose "knowledge_management" ONLY if the user prompt starts with "ADMIN:".
 - If the message does not clearly ask for planning, skill analysis, 
   or tutoring, return {"tasks": ["general_chat"]}.
 - When in doubt, choose "general_chat".
@@ -74,9 +80,7 @@ User: "Check my upcoming assignments" -> {"tasks": ["assignment_sync"]}
 User: "What homework do I have?" -> {"tasks": ["assignment_sync"]}
 User: "What skills do I need for a data science job?" -> {"tasks": ["skill_analysis"]}
 User: "Help me study for my Deep Learning assignment" -> {"tasks": ["tutor_agent"]}
-User: "I need help with Deep learning class" -> {"tasks": ["tutor_agent"]}
-User: "I want to learn Python" -> {"tasks": ["tutor_agent"]}
-User: "Quiz me on Machine Learning" -> {"tasks": ["tutor_agent"]}
+User: "What are the rules for my thesis?" -> {"tasks": ["thesis"]}
 User: "What courses am I taking this semester?" -> {"tasks": ["general_chat"]}
 User: "Update my degree to Business IT" -> {"tasks": ["general_chat"]}
 """
@@ -150,6 +154,13 @@ def supervisor_node(state: AgentState) -> dict:
 
     if not question:
         return _fallback_to_general_chat("empty question")
+
+    # ─────────────────────────────────────────────────────────
+    # Deterministic Security Shortcut: Admin Routing
+    # ─────────────────────────────────────────────────────────
+    if question.upper().startswith("ADMIN:"):
+        print(f"[SUPERVISOR] Admin query shortcut -> knowledge_manager: {question!r}")
+        return {"tasks": ["knowledge_management"]}
 
     if _is_profile_update(question):
         print(f"[SUPERVISOR] profile-update shortcut -> general_chat: {question!r}")

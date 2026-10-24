@@ -39,3 +39,9 @@ alembic
 pymupdf
 mcp>=1.2.0
 nest-asyncio
+
+# RAG
+chromadb
+langchain-chroma
+langchain-ollama
+langchain-text-splitters
