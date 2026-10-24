@@ -1439,9 +1439,7 @@ with gr.Blocks(title="DAIA - AI Study & Career Assistant") as demo:
             # ------------------------------------------------
             # STUDENT PROFILE
             # ------------------------------------------------
-            with gr.Group():
-                gr.Markdown("## 🧠 Student Profile")
-
+            with gr.Accordion("🧠 Student Profile", open=True):
                 profile_box = gr.Markdown(value=refresh_profile({}))
 
                 refresh_profile_btn = gr.Button("Refresh Profile")
