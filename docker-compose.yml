@@ -1,5 +1,4 @@
 services:
-  # Ollama: LLM inference server
   ollama:
     image: ollama/ollama:latest
     container_name: daia-ollama
@@ -10,6 +9,7 @@ services:
       - ./docker/entrypoint-ollama.sh:/entrypoint.sh
     environment:
       MODEL_ID: ${MODEL_ID:-qwen2.5:7b}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text} # Added
       OLLAMA_KEEP_ALIVE: 24h
     entrypoint: ["/bin/bash", "/entrypoint.sh"]
     healthcheck:
@@ -17,10 +17,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 120s
+      start_period: 600s
     restart: unless-stopped
 
-  # Backend: Python application and Gradio UI
   backend:
     build:
       context: .
@@ -37,16 +36,18 @@ services:
       - ./tests:/app/tests
       - ./scripts:/app/scripts
       - ./app:/app/app
+      - ./evaluation:/app/evaluation # Added for easy evaluation
     environment:
-      # Make /app importable so `from src...` and `from app...` both work
       PYTHONPATH: /app
       DATABASE_URL: ${DATABASE_URL:-sqlite:///./data/student_context.db}
       OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
       MODEL_ID: ${MODEL_ID:-qwen2.5:7b}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text} # Added
       OLLAMA_TIMEOUT: ${OLLAMA_TIMEOUT:-300}
       MOODLE_USER_ID: ${MOODLE_USER_ID:-66944}
       STUDENT_DB_ID: ${STUDENT_DB_ID:-1}
       PYTHONUNBUFFERED: "1"
+      TUTOR_MCP_BINARY: /usr/local/bin/tutor-mcp
     working_dir: /app
     command: ["/wait-for-ollama.sh", "python", "-u", "app/ui.py"]
     restart: unless-stopped

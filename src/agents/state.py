@@ -12,4 +12,6 @@ class AgentState(TypedDict):
     skill_analysis_result: str
     job_search_result: str
     general_chat_result: str
+    tutor_result: str
+    thesis_result: str
     final_response: str

@@ -1,6 +1,9 @@
 # Environment variables (Never commit secrets or local config)
 .env
-data/
+data/*
+!data/rag/
+data/rag/*
+!data/rag/thesis_rules.txt
 # Python bytecode and caches
 __pycache__/
 *.py[cod]

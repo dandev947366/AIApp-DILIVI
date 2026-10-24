@@ -14,7 +14,16 @@ from src.agents.state import AgentState
 
 class RoutingDecision(BaseModel):
     tasks: list[
-        Literal["study_planning", "skill_analysis", "job_search", "general_chat"]
+        Literal[
+            "study_planning",
+            "skill_analysis",
+            "job_search",
+            "general_chat",
+            "tutor_agent",
+            "assignment_sync",
+            "thesis",
+            "knowledge_management",
+        ]
     ] = Field(default_factory=list)
 
 
@@ -23,14 +32,20 @@ Your job is to read the user's question and decide which specialized
 AI agent should handle it.
 
 Available Agents:
-1. "study_planning": Handles deadlines, schedules, assignments,
-   homework, exams, quizzes, time management, study plans, labs, and projects.
+1. "study_planning": Handles time management, schedules, deadlines, and 
+   creating a plan for *when* to study (e.g., "make a schedule", "what's due this week?").
 2. "skill_analysis": Handles questions about the user's technical skills,
    career goals, skill gaps, resume, or how to improve abilities.
 3. "job_search": Handles questions about job opportunities, applications,
    interviews, or career advice.
-4. "general_chat": Handles general knowledge, course information,
+4. "tutor_agent": Handles active learning, practicing concepts, taking quizzes, 
+   understanding assignments, or tracking learning progress.
+5. "assignment_sync": Handles queries specifically about checking, listing, or 
+   syncing the student's Moodle assignments and homework.
+6. "general_chat": Handles general knowledge, course information,
    transcripts, greetings, profile updates, or anything else.
+7. "thesis": Handles thesis topic generation, brainstorming, and university thesis rules/guidelines.
+8. "knowledge_management": Handles updates to the university rules.
 
 Rules:
 - Greetings ("hi", "hello", "hey", "good morning", "thanks"),
@@ -44,8 +59,15 @@ Rules:
   or assignments.
 - Only choose "skill_analysis" when the user explicitly asks about
   their skills, strengths, weaknesses, gaps, resume, or career readiness.
-- If the message does not clearly ask for planning or skill analysis,
-  return {"tasks": ["general_chat"]}.
+- Choose "assignment_sync" if the user asks to check, show, list, or update 
+  their assignments (e.g., "check my assignments", "what homework do I have?").
+- Choose "tutor_agent" if the user asks for help learning, studying, 
+  or practicing a specific topic, OR if they ask for help understanding 
+  or completing a specific assignment.
+- Choose "thesis" if the user asks about thesis topics, rules, deadlines, or guidelines.
+- Choose "knowledge_management" ONLY if the user prompt starts with "ADMIN:".
+- If the message does not clearly ask for planning, skill analysis, 
+  or tutoring, return {"tasks": ["general_chat"]}.
 - When in doubt, choose "general_chat".
 
 Return ONLY a valid JSON object with this exact shape:
@@ -53,16 +75,14 @@ Return ONLY a valid JSON object with this exact shape:
 
 Examples:
 User: "When is my database exam?" -> {"tasks": ["study_planning"]}
-User: "Do I have any homework upcoming?" -> {"tasks": ["study_planning"]}
-User: "Plan my study week" -> {"tasks": ["study_planning"]}
+User: "Make a schedule for my assignments" -> {"tasks": ["study_planning"]}
+User: "Check my upcoming assignments" -> {"tasks": ["assignment_sync"]}
+User: "What homework do I have?" -> {"tasks": ["assignment_sync"]}
 User: "What skills do I need for a data science job?" -> {"tasks": ["skill_analysis"]}
+User: "Help me study for my Deep Learning assignment" -> {"tasks": ["tutor_agent"]}
+User: "What are the rules for my thesis?" -> {"tasks": ["thesis"]}
 User: "What courses am I taking this semester?" -> {"tasks": ["general_chat"]}
 User: "Update my degree to Business IT" -> {"tasks": ["general_chat"]}
-User: "Change my preferred study time to evening" -> {"tasks": ["general_chat"]}
-User: "My new study hours are 15" -> {"tasks": ["general_chat"]}
-User: "Update my degree based on my courses" -> {"tasks": ["general_chat"]}
-User: "Set my interests to AI and deep learning" -> {"tasks": ["general_chat"]}
-User: "Hi" -> {"tasks": ["general_chat"]}
 """
 
 
@@ -79,17 +99,11 @@ _PROFILE_FIELDS = (
 )
 
 _PROFILE_UPDATE_PATTERNS = [
-    # "update/change/set/correct/edit my <field> ..."
     rf"\b(?:update|change|set|correct|edit|fix|adjust)\s+(?:my\s+|the\s+)?{_PROFILE_FIELDS}\b",
-    # "I want to update/change my <field>"
     rf"\bi\s+(?:want|need|would like)\s+to\s+(?:update|change|set|correct)\s+(?:my\s+|the\s+)?{_PROFILE_FIELDS}\b",
-    # "my <field> is/are/should be <value>"
     rf"\bmy\s+{_PROFILE_FIELDS}\s+(?:is|are|should be|will be|equals?)\b",
-    # "my new <field> is <value>"
     rf"\bmy\s+new\s+{_PROFILE_FIELDS}\s+(?:is|are)\b",
-    # "forget my <field>"
     rf"\bforget\s+(?:about\s+)?my\s+{_PROFILE_FIELDS}\b",
-    # "make my <field> <value>"
     rf"\bmake\s+my\s+{_PROFILE_FIELDS}\s+\S+",
 ]
 
@@ -142,14 +156,26 @@ def supervisor_node(state: AgentState) -> dict:
         return _fallback_to_general_chat("empty question")
 
     # ─────────────────────────────────────────────────────────
-    # Deterministic shortcut: obvious profile updates route to
-    # general_chat without asking the 3B model. This stops
-    # "update my degree based on my courses" from being parsed
-    # as study planning.
+    # Deterministic Security Shortcut: Admin Routing
     # ─────────────────────────────────────────────────────────
+    if question.upper().startswith("ADMIN:"):
+        print(f"[SUPERVISOR] Admin query shortcut -> knowledge_manager: {question!r}")
+        return {"tasks": ["knowledge_management"]}
+
     if _is_profile_update(question):
         print(f"[SUPERVISOR] profile-update shortcut -> general_chat: {question!r}")
         return {"tasks": ["general_chat"]}
+
+    # ─────────────────────────────────────────────────────────
+    # Deterministic shortcut: obvious assignment queries route
+    # to assignment_sync without asking the LLM.
+    # ─────────────────────────────────────────────────────────
+    sync_keywords = ["assignment", "homework", "task", "deadline"]
+    if any(kw in question.lower() for kw in sync_keywords):
+        print(
+            f"[SUPERVISOR] Assignment query shortcut -> assignment_sync: {question!r}"
+        )
+        return {"tasks": ["assignment_sync"]}
 
     if "OLLAMA_HOST" in os.environ:
         del os.environ["OLLAMA_HOST"]

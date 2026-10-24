@@ -93,6 +93,10 @@ def _should_extract(message: str) -> bool:
     msg = (message or "").strip().lower()
     if not msg:
         return False
+    # Only extract if the user talks about themselves
+    triggers = ["i ", "my ", "me ", "prefer", "goal", "study", "degree", "hour"]
+    if not any(t in msg for t in triggers):
+        return False
     return msg not in _GREETING_ONLY
 
 
