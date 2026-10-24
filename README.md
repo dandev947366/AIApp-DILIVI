@@ -315,4 +315,4 @@ Possible future extensions:
 | [`docs/FEATURES.md`](docs/FEATURES.md) | Product, Users | Comprehensive list of product features and capabilities |
 | [`docs/architecture.md`](docs/architecture.md) | Developers, Architects | System diagrams and architectural design decisions (accompanies `DAIA_architecture.svg`) |
 | [`docs/roadmap-progress.md`](docs/roadmap-progress.md) | Stakeholders | Current progress against the roadmap (`road-map.png`) |
-| [`evaluation/README.md`](evaluation/README.md) | QA, Researchers | Assignment analysis accuracy test cases, evaluation methodology, and results |
+| [`evaluation/evaluation_results`](evaluation/evaluation_results) | QA, Researchers | Assignment analysis accuracy test cases, evaluation methodology, and results |
