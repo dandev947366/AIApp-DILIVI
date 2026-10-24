@@ -99,7 +99,8 @@ The solution can be viewed as three connected levels:
 | 8 | Telegram bot intergration | ✅ |
 | 9 | RAG career advisor | 🚧 planned |
 
-
+### 1.7 Features
+[Features](docs/FEATURES.md)
 
 #  2. Architecture
 
