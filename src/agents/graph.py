@@ -13,10 +13,16 @@ from src.agents.job_search import job_search_node
 from src.agents.tutor_agent import tutor_agent_node
 from src.agents.assignment_sync import assignment_sync_node
 
+# New Agents
+from src.agents.thesis_agent import thesis_agent_node
+from src.agents.knowledge_manager import knowledge_manager_node
+
 
 def route_after_supervisor(state: AgentState) -> str:
     tasks = state.get("tasks", [])
-    if "assignment_sync" in tasks:
+    if "knowledge_management" in tasks:
+        return "knowledge_manager"
+    elif "assignment_sync" in tasks:
         return "assignment_sync"
     elif "study_planning" in tasks:
         return "study_planner"
@@ -26,6 +32,8 @@ def route_after_supervisor(state: AgentState) -> str:
         return "job_search"
     elif "tutor_agent" in tasks:
         return "tutor_agent"
+    elif "thesis" in tasks:
+        return "thesis_agent"
     return "general_chat"
 
 
@@ -40,6 +48,9 @@ def final_response_node(state: AgentState) -> dict:
 
     if state.get("general_chat_result"):
         parts.append(state["general_chat_result"])
+
+    if state.get("thesis_result"):
+        parts.append(f"🎓 **Thesis Advisor:**\n{state['thesis_result']}")
 
     if state.get("study_plan_result"):
         parts.append(f"📅 **Study Plan:**\n{state['study_plan_result']}")
@@ -69,6 +80,11 @@ def build_agent_graph():
     graph.add_node("job_search", job_search_node)
     graph.add_node("general_chat", general_chat_node)
     graph.add_node("tutor_agent", tutor_agent_node)
+
+    # Register the new RAG nodes
+    graph.add_node("thesis_agent", thesis_agent_node)
+    graph.add_node("knowledge_manager", knowledge_manager_node)
+
     graph.add_node("final_response", final_response_node)
 
     # Edges
@@ -79,12 +95,14 @@ def build_agent_graph():
         "supervisor",
         route_after_supervisor,
         {
+            "knowledge_manager": "knowledge_manager",
             "assignment_sync": "assignment_sync",
             "study_planner": "study_planner",
             "skill_analyst": "skill_analyst",
             "job_search": "job_search",
             "general_chat": "general_chat",
             "tutor_agent": "tutor_agent",
+            "thesis_agent": "thesis_agent",
         },
     )
 
@@ -102,6 +120,10 @@ def build_agent_graph():
     graph.add_edge("general_chat", "final_response")
     graph.add_edge("job_search", "final_response")
     graph.add_edge("tutor_agent", "final_response")
+
+    # Edges for the RAG nodes
+    graph.add_edge("thesis_agent", "final_response")
+    graph.add_edge("knowledge_manager", "final_response")
 
     graph.add_edge("final_response", END)
 

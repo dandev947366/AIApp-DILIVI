@@ -42,11 +42,13 @@ COPY . .
 COPY --from=tutor-builder /out/tutor-mcp /usr/local/bin/tutor-mcp
 RUN chmod +x /usr/local/bin/tutor-mcp
 
-# Create application data directories
+# Create application data directories (including RAG directories)
 RUN mkdir -p \
     /app/data/university_docs \
     /app/data/vector_store \
-    /app/data/tutor-mcp
+    /app/data/tutor-mcp \
+    /app/data/rag \
+    /app/data/chroma_db
 
 # Add wait-for-ollama script
 # Normalize line endings (CRLF -> LF) and make executable

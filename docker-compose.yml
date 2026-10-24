@@ -9,6 +9,7 @@ services:
       - ./docker/entrypoint-ollama.sh:/entrypoint.sh
     environment:
       MODEL_ID: ${MODEL_ID:-qwen2.5:7b}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text} # Added
       OLLAMA_KEEP_ALIVE: 24h
     entrypoint: ["/bin/bash", "/entrypoint.sh"]
     healthcheck:
@@ -16,7 +17,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 120s
+      start_period: 600s
     restart: unless-stopped
 
   backend:
@@ -35,11 +36,13 @@ services:
       - ./tests:/app/tests
       - ./scripts:/app/scripts
       - ./app:/app/app
+      - ./evaluation:/app/evaluation # Added for easy evaluation
     environment:
       PYTHONPATH: /app
       DATABASE_URL: ${DATABASE_URL:-sqlite:///./data/student_context.db}
       OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
       MODEL_ID: ${MODEL_ID:-qwen2.5:7b}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text} # Added
       OLLAMA_TIMEOUT: ${OLLAMA_TIMEOUT:-300}
       MOODLE_USER_ID: ${MOODLE_USER_ID:-66944}
       STUDENT_DB_ID: ${STUDENT_DB_ID:-1}

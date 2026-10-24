@@ -1,0 +1,156 @@
+HAMK UNIVERSITY THESIS AND AI GUIDELINES 2026
+
+--- SECTION 1: THE THESIS PROCESS CHECKLIST ---
+The thesis process contains at least the following stages. 
+Note: SC = Send for External Comment.
+
+1. Start of the thesis process:
+- Topic template retrieved from Moodle.
+- Supervisor name added to the topic form after the topic seminar.
+- Topic form copied to Wihi.
+
+2. Planning stage:
+- Plan template retrieved from Moodle.
+- Plan uploaded to Wihi after plan seminar.
+- A signed thesis contract uploaded to Wihi, if you have a client. Supervisor takes the file from Wihi and signs.
+- Possible research permits acquired and stored to Wihi.
+
+3. Implementation stage:
+- Thesis template retrieved from Moodle.
+- Content management plan written to thesis annex.
+- Zotero installed and taken into use.
+- After 5-10 pages writing sent to language teacher with Wihi Post for comment.
+
+4. Interim seminar:
+- Thesis sent to opponent around one week before the interim seminar.
+- Opposing report template retrieved from Moodle.
+- Opposing report completed and sent to the supervisor of the seminar over Wihi SC.
+- (SC to this supervisor, if not own supervisor).
+- Opposing report completed and sent to the opposed writer.
+
+5. Final Seminar:
+- 20 min final seminar ppt stored to Wihi.
+- (SC to this supervisor, if not own supervisor).
+- Maturity exam done and stored to Wihi.
+
+6. Final stages (not necessarily in this order):
+- Thesis stored to Wihi for final evaluation.
+- SC to language teacher for language check.
+- SC to client.
+- Plagiarism check to Ouriginal done in Wihi.
+- Final version stored in Wihi and Theseus, pdf/a format.
+
+--- SECTION 2: AI USE GUIDELINES ---
+Students must read the AI-use guidelines before beginning their thesis. AI must be clearly disclosed.
+
+Acceptable applications of AI:
+- Topic idea brainstorming.
+- Consultation on research questions (identifying gaps).
+- Finding appropriate research methods.
+- Benchmarking state-of-the-art research.
+- Exploring literature and summarizing.
+- Support writing process (enhancing readability, but must review and edit).
+- Coding assistance (explanations of logic; must understand and validate all code).
+- Visualization (producing infographics).
+- Using AI as a simulated client to test ideas.
+
+Unacceptable applications of AI:
+- Do not share any sensitive or confidential data.
+- AI must NOT be used to generate the substantive content of the thesis.
+- Do not trust results blindly; verify outputs.
+- Use of AI during the maturity exam is strictly forbidden.
+- Submitting AI-generated work as your own is plagiarism/fraud.
+
+AI Disclosure Requirements:
+Disclose AI in the "Methodology" section or at the end. Include:
+1. Name of AI tool(s).
+2. Description of task.
+3. Specific prompt(s) used (optional).
+4. How the output was used.
+
+--- SECTION 3: ETHICAL AND LEGAL RECOMMENDATIONS ---
+- Conflicts of Interest: Must ascertain possible conflicts of interest.
+- Research Ethics: Follow good research practices (TENK RI 2023).
+- Data Protection (GDPR): Only process necessary data. Special categories (health, ethnicity) require explicit consent.
+- Public Document: Theses are public documents (Act on the Openness of Government Activities) published in Theseus.
+
+--- SECTION 4: HAMK REFERENCING GUIDE (APA 7) ---
+HAMK uses APA 7 style. Plagiarism includes copying text without references.
+
+Citing AI as a Source (Specific Chat):
+In-text: (OpenAI, 2025)
+Reference: OpenAI. (2025, Aug 23). Title of chat in italics [Generative AI chat]. ChatGPT. URL
+
+Citing AI as Software:
+In-text: (OpenAI, 2025)
+Reference: OpenAI. (2025). ChatGPT [Large language model]. https://chatgpt.com/
+
+Citing AI-Generated Images:
+Figure caption must state it was generated with AI.
+Reference: OpenAI. (2024). DALL·E [Image generation model]. https://openai.com/dall-e
+
+--- SECTION 5: THESIS STRUCTURE, THEORY, AND METHODS ---
+A standard 30-page Bachelor's thesis (graded 3) usually follows this formula:
+- Theory (Technology + Target Environment) + Methods (Agile, Prototype, etc.) + Practical Part (PoC, MVP, Test, Plan) + Results.
+
+Theoretical Part:
+- Written in your own words based on sources.
+- Must describe both the technology (e.g., Flutter, React, UiPath) and the target environment (e.g., game world, banking, service desk).
+
+Methods and Data Collection:
+- How do you get new information? (Development project, diary, interviews, surveys, SWOT, action research, case study).
+- Data collection methods: Diary, screenshots, files, Webropol.
+- Requires a Data Management Plan (appendix 1).
+
+Practical Part:
+- Can range from a pure literature review to a requirements specification, prototype, product, or comparison.
+- Results: What are the benefits of your thesis? What data supports your claim?
+
+Introduction and Summary:
+- Both should be about one page (like mirrors).
+- Introduction: Leads the reader in, presents research questions.
+- Summary: Short text on research question success, own learning, and future ideas.
+
+--- SECTION 6: WIHI SYSTEM INSTRUCTIONS ---
+Wihi is the thesis management system.
+
+1. Logging in:
+- Go to pakki.hamk.fi and click the Wihi icon, or go directly to wihi.hamk.fi. Log in with HAMK ID.
+
+2. Topic Proposal:
+- Select "Create a topic proposal".
+- Fill mandatory fields (Thesis title in English is critical and transfers to your degree certificate).
+- Add commissioning information if applicable.
+- Commit to good scientific practice and submit. The coordinator will approve it.
+
+3. Thesis Plan and Schedule:
+- Once approved, upload the preliminary thesis plan (PDF), schedule, and thesis agreement (if commissioning).
+- Supervisor will approve it.
+
+4. External Comments:
+- You can send your thesis to the commissioner using "Send for external comments". The link is valid for 21 days.
+
+5. Phases:
+- Phase 1: Planning phase.
+- Phase 2: Implementation phase (upload thesis as PDF).
+- Phase 3: Thesis ready for evaluation.
+
+6. Plagiarism Check (Phase 3):
+- Upload the final PDF (max 20 MB).
+- Accept the Turnitin EULA license.
+- Wait for analysis. The supervisor accepts or rejects it.
+
+7. Publishing:
+- Once evaluated, add the URN link to your published thesis in Theseus to Wihi.
+
+--- SECTION 7: RESEARCH QUESTION EXAMPLES ---
+A good thesis typically has around three research questions (e.g., 1 for Theory, 1 for Methods, 1 for Outcome).
+
+Examples:
+- What are the criteria for developing application S?
+- What process should application S follow?
+- What technologies should be used to develop Application S?
+- At what cost can service P be implemented in different cloud services?
+- How can costs be optimized for service P in different cloud services?
+- What system can be used to analyze Company Y's sales data into the most flexible dashboard?
+- What are the best practices when Company Y does Case A?
