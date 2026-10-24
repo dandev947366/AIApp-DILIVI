@@ -1,21 +1,19 @@
 """Jobicy job search via the public REST API.
 
 Public API
-----------
-- `search_jobs_mcp(query, geo, limit)`         — generic keyword search
-- `search_jobs_for_student(student_db_id, …)`  — ranks against the student's
-  skills + interests + career goals.
+`search_jobs_mcp(query, geo, limit)`         — generic keyword search
+`search_jobs_for_student(student_db_id, …)`  — ranks against the student's
+                                               skills + interests + career goals.
 
 Design notes
-------------
-- No MCP transport, no async bridging.
-- Scoring is done only against the job **title** and **stack** (never the
-  description — substring matches there produce false positives).
-- Generic terms ("science", "object-oriented programming", etc.) are
-  filtered out before scoring and never used as a tag hint.
-- Tag hints are tried in priority order (goals → interests → skills), and
-  each attempt automatically falls back to worldwide results if the
-  location filter yields nothing.
+No MCP transport, no async bridging.
+Scoring is done only against the job title and stack (never the
+description — substring matches there produce false positives).
+Generic terms ("science", "object-oriented programming", etc.) are
+filtered out before scoring and never used as a tag hint.
+Tag hints are tried in priority order (goals → interests → skills), and
+each attempt automatically falls back to worldwide results if the
+location filter yields nothing.
 """
 
 import re
@@ -23,16 +21,15 @@ import httpx
 from src.tools.jobs_db import save_jobs_to_db
 
 JOBICY_API_URL = "https://jobicy.com/api/v2/remote-jobs"
-DEFAULT_TIMEOUT = 20.0
+# ➕ Reduced timeout to prevent cascading failures (Fixes S3)
+DEFAULT_TIMEOUT = 5.0
 USER_AGENT = "DAIA-JobSearch/1.0"
 FETCH_SLICE = 50  # ask Jobicy for more than we return, then rank
 MIN_SCORE = 5  # a job must actually overlap the profile to be shown
 
-
 # ------------------------------------------------------------------
 # filtering
 # ------------------------------------------------------------------
-
 # Generic terms that don't identify a role. Filtered from scoring and
 # never used as a tag hint.
 _GENERIC_SKILLS = {
@@ -131,8 +128,6 @@ def _tokenize_phrase(phrase: str) -> list[str]:
 # ------------------------------------------------------------------
 # formatting helpers
 # ------------------------------------------------------------------
-
-
 def _as_text(value) -> str:
     """Jobicy returns some fields as str, others as list[str]. Normalize."""
     if value is None:
@@ -200,8 +195,6 @@ def _matches_keyword(job: dict, keyword: str) -> bool:
 # ------------------------------------------------------------------
 # scoring
 # ------------------------------------------------------------------
-
-
 def _score_job_against_profile(
     job: dict,
     skills: list[dict],
@@ -211,7 +204,6 @@ def _score_job_against_profile(
     """Score on title and stack only (never description)."""
     title = _as_text(job.get("jobTitle")).lower()
     stack = _as_text(job.get("jobIndustry")).lower()
-
     score = 0
     matched: set[str] = set()
 
@@ -267,8 +259,6 @@ def _fetch_jobicy(params: dict) -> list[dict]:
 # ------------------------------------------------------------------
 # generic search
 # ------------------------------------------------------------------
-
-
 def search_jobs_mcp(query: str = "", geo: str = "", limit: int = 5) -> str:
     """Generic Jobicy keyword search."""
     try:
@@ -279,7 +269,6 @@ def search_jobs_mcp(query: str = "", geo: str = "", limit: int = 5) -> str:
             params["tag"] = query.strip()
 
         jobs = _fetch_jobicy(params)
-
         if query:
             refined = [j for j in jobs if _matches_keyword(j, query)]
             if refined:
@@ -320,8 +309,6 @@ def search_jobs_mcp(query: str = "", geo: str = "", limit: int = 5) -> str:
 # ------------------------------------------------------------------
 # student-aware search
 # ------------------------------------------------------------------
-
-
 def _build_search_hints(
     extra_query: str,
     profile: dict,
@@ -329,12 +316,11 @@ def _build_search_hints(
 ) -> list[str]:
     """
     Return ordered tag hints.
-
     Priority:
-      1. explicit query from the user's message
-      2. career goals (short term, long term)
-      3. interests
-      4. top 3 meaningful skills (no role words)
+       1. explicit query from the user's message
+       2. career goals (short term, long term)
+       3. interests
+       4. top 3 meaningful skills (no role words)
     """
     hints: list[str] = []
     seen: set[str] = set()
@@ -381,6 +367,9 @@ def _try_hints(hints: list[str], geo: str) -> tuple[list[dict], str]:
     Try hints one by one. First with `geo`, then without it if `geo`
     yielded nothing. Returns (jobs, hint_used).
     """
+    # ➕ Limit to top 2 hints to prevent excessive API calls and timeouts
+    hints = hints[:2]
+
     seen_urls: set[str] = set()
 
     def _collect(jobs: list[dict]) -> list[dict]:
@@ -452,7 +441,6 @@ def search_jobs_for_student(
         profile = {}
 
     interests = profile.get("interests") or []
-
     goals_dict = profile.get("career_goals") or {}
     career_goal_terms: list[str] = []
     if isinstance(goals_dict, dict):
@@ -502,7 +490,6 @@ def search_jobs_for_student(
         for job in raw_jobs
     ]
     scored.sort(key=lambda t: t[0], reverse=True)
-
     matched_jobs = [t for t in scored if t[0] >= MIN_SCORE][:limit]
 
     # Save to DB for the Job Market sidebar

@@ -16,7 +16,7 @@ def search_thesis_guide(query: str) -> str:
         embedding_function=embeddings,
         collection_name="thesis_guide",
     )
-    results = db.similarity_search(query, k=2)
+    results = db.similarity_search(query, k=20)
     if not results:
         return "No relevant information found in the thesis guidelines."
     return "\n\n".join([doc.page_content for doc in results])
