@@ -88,15 +88,17 @@ The solution can be viewed as three connected levels:
 9. **User reaction:** student can accept, reject, or refine the suggestions, allowing the AI to generate more relevant thesis and internship recommendations.
 
 ### 1.6 Scope
+
 | Phase | Feature | Status |
-| 1 | Moodle iCal -> SQLite | ✅ |
+|------:|---------|:------:|
+| 1 | Moodle iCal → SQLite | ✅ |
 | 2 | Deterministic DB tools | ✅ |
 | 3 | LangGraph agents (memory, supervisor, planner, analyst) | ✅ |
 | 4 | Conversation history + memory extraction | ✅ |
-| 5 | Authentication, login/logout, session cahe | ✅ |
+| 5 | Authentication, login/logout, session cache | ✅ |
 | 6 | Tutor MCP Server, adaptive learning tools | ✅ |
 | 7 | Career assistant + live job-market data | ✅ |
-| 8 | Telegram bot intergration | ✅ |
+| 8 | Telegram bot integration | ✅ |
 | 9 | RAG career advisor | 🚧 planned |
 
 ### 1.7 Features
