@@ -103,6 +103,8 @@ The solution can be viewed as three connected levels:
 
 #  2. Architecture
 
+[Architecture](docs/architecture.md)
+
 ## 2.1 System diagram
 Initial architecture:
 
@@ -306,4 +308,10 @@ Possible future extensions:
 |---|---|---|
 | **README.md** (this file) | Everyone | Overview, architecture, technologies, install & run, testing, limitations, future development |
 | `SETUP.md` | New users, operators | Step-by-step install, OS-specific notes, troubleshooting |
-| `docs/TUTOR_MCP.md` | AI engineers | Full 46-tool reference, tool schemas, BKT/FSRS calibration |
+| `docs/TUTOR_MCP.md` | AI engineers | Full 46-tool reference, tool schemas, BKT/FSRS calibration, extension points |
+| `docs/AGENT_GRAPH.md` | AI engineers, Developers | LangGraph topology, routing logic, node reference, execution flows, extension checklist |
+| `docs/DATABASE.md` | Developers, Operators | Table schemas, indexes, ER diagram, migrations, backup & restore, known limitations |
+| `docs/FEATURES.md` | Product, Users | Comprehensive list of product features and capabilities |
+| `docs/architecture.md` | Developers, Architects | System diagrams and architectural design decisions (accompanies `DAIA_architecture.svg`) |
+| `docs/roadmap-progress.md` | Stakeholders | Current progress against the roadmap (`road-map.png`) |
+| `evaluation/README.md` | QA, Researchers | Assignment analysis accuracy test cases, evaluation methodology, and results |
