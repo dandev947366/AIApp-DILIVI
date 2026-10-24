@@ -2,7 +2,7 @@
 
 > **Audience:** Developers, architects, and reviewers.
 > **Scope:** High-level system design, authentication, data flow, memory loop, and component interactions.
-> **Related Docs:** [Agent Graph](AGENT_GRAPH.md) · [Database Schema](DATABASE.md) · [Tutor MCP](TUTOR-MCP.md)
+> **Related Docs:** [Agent Graph](AGENT_GRAPH.md) · [Database Schema](DATABASE.md) · [Tutor MCP](Tutor-MCP.md)
 
 ---
 
