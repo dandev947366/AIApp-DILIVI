@@ -1,5 +1,7 @@
 # DAIA (Digital Artificial Intelligent Assistant) - AI Study Path and Career Assistant
 
+VIDEO LINK: https://drive.google.com/file/d/14-AthoQLnVG-0fkx8cFvC9T2jZQoJFgC/view?usp=sharing
+
 Group project for the **Development of AI Applications** course
 
 A local, privacy-preserving AI assistant that helps university students plan their studies and connect daily coursework to longer-term academic and career goals.
